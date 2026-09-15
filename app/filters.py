@@ -1,5 +1,6 @@
 from datetime import date, datetime
 
+import markdown as _markdown
 from markupsafe import Markup, escape
 
 
@@ -29,7 +30,17 @@ def nl2p(value) -> Markup:
     return Markup("".join(f"<p>{p.replace(chr(10), '<br>')}</p>" for p in paragraphs))
 
 
+def render_markdown(value) -> Markup:
+    # Story bodies are admin-authored (behind password auth), so rendering the resulting
+    # HTML directly is fine - the admin already has full server access anyway.
+    if not value:
+        return Markup("")
+    html = _markdown.markdown(value, extensions=["fenced_code", "nl2br", "sane_lists"])
+    return Markup(html)
+
+
 def register_filters(app):
     app.add_template_filter(fmt_date, "date")
     app.add_template_filter(fmt_time, "time")
     app.add_template_filter(nl2p, "nl2p")
+    app.add_template_filter(render_markdown, "markdown")

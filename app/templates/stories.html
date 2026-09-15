@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% from "_macros.html" import story_card %}
+{% block title %}Stories & Interviews &ndash; {{ config.SITE_NAME }}{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1>Stories &amp; Interviews</h1>
+  <p>Humans of Bundjalung: the people behind the music.</p>
+</section>
+{% if stories %}
+<div class="card-grid">
+  {% for s in stories %}{{ story_card(s) }}{% endfor %}
+</div>
+{% else %}
+<p class="empty">No stories published yet.</p>
+{% endif %}
+{% endblock %}

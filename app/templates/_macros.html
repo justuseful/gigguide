@@ -15,3 +15,34 @@
   </a>
 </article>
 {% endmacro %}
+
+{% macro story_card(story) %}
+<article class="story-card">
+  <a class="story-card__link" href="{{ url_for('public.story', slug=story.slug) }}">
+    {% if story.hero_image %}
+      <img class="story-card__img" src="{{ url_for('public.uploads', filename=story.hero_image) }}" alt="" loading="lazy">
+    {% endif %}
+    <div class="story-card__body">
+      <span class="badge">{{ story.category }}</span>
+      <h3>{{ story.title }}</h3>
+      {% if story.excerpt %}<p class="muted">{{ story.excerpt }}</p>{% endif %}
+    </div>
+  </a>
+</article>
+{% endmacro %}
+
+{% macro comment_form(story, parent_id=None) %}
+<form method="post" action="{{ url_for('public.story_comment', slug=story.slug) }}#comments" class="form comment-form">
+  <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+  {% if parent_id %}<input type="hidden" name="parent_id" value="{{ parent_id }}">{% endif %}
+  <div class="hp-field" aria-hidden="true">
+    <label>Leave this field blank<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+  </div>
+  <div class="field-row">
+    <div class="field"><label>Name<input type="text" name="author_name" required maxlength="100"></label></div>
+    <div class="field"><label>Email (not shown publicly)<input type="email" name="author_email" required maxlength="200"></label></div>
+  </div>
+  <div class="field"><label>Comment<textarea name="body" required maxlength="4000"></textarea></label></div>
+  <button class="btn" type="submit">{{ "Post reply" if parent_id else "Post comment" }}</button>
+</form>
+{% endmacro %}

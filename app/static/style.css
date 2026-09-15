@@ -179,3 +179,32 @@ th, td { text-align: left; padding: 0.5rem 0.6rem; border-bottom: 1px solid var(
 .admin-bar__title { margin: 0 0.5rem 0 0; }
 
 .site-footer { text-align: center; color: var(--muted); font-size: 0.85rem; padding: 2rem 1rem; }
+
+/* Stories */
+.story-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+.story-card__link { display: block; color: inherit; text-decoration: none; }
+.story-card__img { width: 100%; height: 9rem; object-fit: cover; display: block; }
+.story-card__body { padding: 0.75rem 0.9rem; }
+.story-card__body h3 { margin: 0.3rem 0; font-size: 1.05rem; }
+
+.story-detail h1 { margin: 0.3rem 0 0.6rem; font-size: 1.9rem; line-height: 1.15; }
+.story-detail__body { margin: 1.25rem 0; }
+.story-detail__body p { margin: 0 0 1rem; }
+.story-detail__body img { border-radius: var(--radius); }
+
+/* Comments */
+.comments { margin-top: 2rem; padding-top: 1.25rem; border-top: 1px solid var(--line); }
+.comment { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 0.8rem 1rem; margin-bottom: 0.75rem; }
+.comment--reply { margin-left: 1.5rem; margin-top: 0.6rem; background: var(--bg); }
+.comment--pending { border-color: var(--accent); }
+.comment__meta { margin: 0 0 0.3rem; color: var(--muted); font-size: 0.85rem; }
+.comment__body p { margin: 0 0 0.5rem; }
+.reply-toggle { margin-top: 0.5rem; }
+.reply-toggle summary { cursor: pointer; color: var(--accent-dark); font-weight: 600; font-size: 0.9rem; }
+.comment-form { margin-top: 0.75rem; max-width: none; }
+.inline-form { display: inline-block; margin-right: 0.5rem; }
+
+/* Honeypot: off-screen, never shown to real visitors */
+.hp-field { position: absolute; left: -9999px; top: -9999px; }
+
+.textarea--large { min-height: 14rem; }

@@ -54,10 +54,15 @@ def index():
         if not groups or groups[-1][0] != row["gig_date"]:
             groups.append((row["gig_date"], []))
         groups[-1][1].append(row)
+    latest_stories = db.execute(
+        "SELECT id, slug, title, category, excerpt, hero_image FROM stories "
+        "WHERE published = 1 ORDER BY published_at DESC LIMIT 3"
+    ).fetchall()
     return render_template(
         "index.html",
         groups=groups,
         featured=featured,
+        latest_stories=latest_stories,
         today=today.isoformat(),
         tomorrow=(today + timedelta(days=1)).isoformat(),
     )
@@ -115,3 +120,7 @@ def uploads(filename):
 @bp.get("/healthz")
 def healthz():
     return {"ok": True}
+
+
+# Registers additional routes (stories, comments) onto this same blueprint.
+from . import routes_stories  # noqa: E402,F401

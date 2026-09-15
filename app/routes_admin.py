@@ -7,7 +7,7 @@ from flask import Blueprint, current_app, flash, redirect, render_template, requ
 
 from .auth import admin_required, check_csrf
 from .db import get_db
-from .util import today_local
+from .util import slugify, today_local, unique_slug
 
 bp = Blueprint("admin", __name__)
 
@@ -41,21 +41,6 @@ def parse_youtube_id(value: str) -> str:
     if not match:
         raise ValueError("Couldn't find a YouTube video ID in that link.")
     return match.group(1)
-
-
-def slugify(text: str) -> str:
-    slug = re.sub(r"[^a-z0-9]+", "-", (text or "").lower()).strip("-")
-    return slug or "venue"
-
-
-def unique_slug(db, base: str, exclude_id: int | None = None) -> str:
-    slug, n = base, 2
-    while True:
-        row = db.execute("SELECT id FROM venues WHERE slug = ?", (slug,)).fetchone()
-        if row is None or row["id"] == exclude_id:
-            return slug
-        slug = f"{base}-{n}"
-        n += 1
 
 
 def save_flyer(file) -> str | None:
@@ -152,6 +137,7 @@ def dashboard():
         (week_start,),
     ).fetchall()
     venue_count = db.execute("SELECT COUNT(*) FROM venues").fetchone()[0]
+    pending_comments = db.execute("SELECT COUNT(*) FROM comments WHERE status = 'pending'").fetchone()[0]
     return render_template(
         "admin/dashboard.html",
         upcoming=upcoming,
@@ -159,6 +145,7 @@ def dashboard():
         total_views=total_views,
         top_pages=top_pages,
         venue_count=venue_count,
+        pending_comments=pending_comments,
     )
 
 
@@ -292,7 +279,7 @@ def venue_new():
             for message in errors:
                 flash(message, "error")
             return render_template("admin/venue_form.html", venue=data, is_new=True), 400
-        slug = unique_slug(db, slugify(data["name"]))
+        slug = unique_slug(db, "venues", slugify(data["name"]))
         db.execute(
             "INSERT INTO venues (slug, name, town, address, website, instagram, description) "
             "VALUES (?,?,?,?,?,?,?)",
@@ -328,3 +315,7 @@ def venue_edit(venue_id):
         flash("Venue updated.", "ok")
         return redirect(url_for("admin.venues"))
     return render_template("admin/venue_form.html", venue=venue, is_new=False)
+
+
+# Registers additional routes (stories, comment moderation) onto this same blueprint.
+from . import routes_admin_stories  # noqa: E402,F401

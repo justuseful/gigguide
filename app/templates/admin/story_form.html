@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}{{ "Add story" if is_new else "Edit story" }} &ndash; Admin{% endblock %}
+{% block content %}
+<div class="admin-bar">
+  <h1 class="admin-bar__title">{{ "Add story" if is_new else "Edit story" }}</h1>
+  <a class="btn btn--ghost" href="{{ url_for('admin.stories') }}">Back to stories</a>
+</div>
+
+<form method="post" enctype="multipart/form-data" class="form">
+  <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+
+  <div class="field">
+    <label for="title">Title</label>
+    <input type="text" id="title" name="title" required maxlength="200" value="{{ story.title or '' }}">
+  </div>
+
+  <div class="field">
+    <label for="category">Category</label>
+    <select id="category" name="category">
+      {% for c in categories %}
+        <option value="{{ c }}" {% if story.category == c %}selected{% endif %}>{{ c }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="field">
+    <label for="excerpt">Short excerpt (shown on cards)</label>
+    <input type="text" id="excerpt" name="excerpt" maxlength="300" value="{{ story.excerpt or '' }}">
+  </div>
+
+  <div class="field">
+    <label for="youtube">YouTube video</label>
+    <input type="text" id="youtube" name="youtube" placeholder="Paste a YouTube link or video ID" value="{{ story.youtube or story.youtube_id or '' }}">
+  </div>
+
+  <div class="field">
+    <label for="hero_image">Hero image</label>
+    {% if story.hero_image %}
+      <p><img class="flyer flyer--thumb" src="{{ url_for('public.uploads', filename=story.hero_image) }}" alt="Current image"></p>
+      <label class="check"><input type="checkbox" name="remove_hero_image" value="1"> Remove current image</label>
+    {% endif %}
+    <input type="file" id="hero_image" name="hero_image" accept="image/png,image/jpeg,image/webp,image/gif">
+    <small>PNG, JPG, WebP or GIF, up to 5MB. Large images are resized automatically.</small>
+  </div>
+
+  <div class="field">
+    <label for="body">Body &mdash; Markdown supported (**bold**, *italic*, blank line between paragraphs)</label>
+    <textarea id="body" name="body" class="textarea--large" required>{{ story.body or '' }}</textarea>
+  </div>
+
+  <div class="field">
+    <label class="check"><input type="checkbox" name="published" value="1" {% if story.published %}checked{% endif %}> Published (visible on the site)</label>
+  </div>
+
+  <button class="btn" type="submit">{{ "Add story" if is_new else "Save changes" }}</button>
+</form>
+
+{% if not is_new %}
+<form method="post" action="{{ url_for('admin.story_delete', story_id=story.id) }}" class="form form--danger" onsubmit="return confirm('Delete this story and its comments? This cannot be undone.');">
+  <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+  <button class="btn btn--danger" type="submit">Delete story</button>
+</form>
+{% endif %}
+{% endblock %}

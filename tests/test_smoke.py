@@ -78,6 +78,72 @@ def test_smoke():
     # page views were counted (test client UA isn't a bot)
     dash = c.get("/admin/", headers=AUTH).get_data(as_text=True)
     assert "page views, last 7 days" in dash
+
+    # --- stories ---
+    assert c.get("/stories").status_code == 200
+
+    page = c.get("/admin/stories/new", headers=AUTH).get_data(as_text=True)
+    r = c.post("/admin/stories/new", headers=AUTH, follow_redirects=True, data={
+        "_csrf": _csrf(page), "title": "Meet the Buttermores", "category": "Human of Bundjalung",
+        "excerpt": "A chat with a local family.", "body": "Line one\n\nLine two",
+        "youtube": "https://youtu.be/dQw4w9WgXcQ", "published": "1",
+    })
+    assert r.status_code == 200 and "Story added" in r.get_data(as_text=True)
+
+    assert "Meet the Buttermores" in c.get("/stories").get_data(as_text=True)
+    assert "Meet the Buttermores" in c.get("/").get_data(as_text=True)  # shows on home page too
+
+    story_resp = c.get("/stories/meet-the-buttermores")
+    assert story_resp.status_code == 200
+    story_html = story_resp.get_data(as_text=True)
+    assert "<p>Line one</p>" in story_html and "<p>Line two</p>" in story_html and "dQw4w9WgXcQ" in story_html
+    assert c.get("/stories/does-not-exist").status_code == 404
+
+    token = _csrf(story_html)
+
+    # comment CSRF is enforced
+    assert c.post("/stories/meet-the-buttermores/comments", data={"author_name": "x"}).status_code == 400
+
+    # honeypot trips silently - nothing is stored
+    c.post("/stories/meet-the-buttermores/comments", follow_redirects=True, data={
+        "_csrf": token, "author_name": "Bot", "author_email": "bot@example.com",
+        "body": "buy cheap stuff now", "website": "http://spam.example",
+    })
+    assert "buy cheap stuff now" not in c.get("/admin/comments", headers=AUTH).get_data(as_text=True)
+
+    # a real first-time comment is held for moderation, not shown publicly yet
+    r = c.post("/stories/meet-the-buttermores/comments", follow_redirects=True, data={
+        "_csrf": token, "author_name": "Jamie", "author_email": "jamie@example.com", "body": "Great read!",
+    })
+    assert "held for a quick review" in r.get_data(as_text=True)
+    assert "Great read!" not in c.get("/stories/meet-the-buttermores").get_data(as_text=True)
+
+    admin_comments = c.get("/admin/comments", headers=AUTH).get_data(as_text=True)
+    assert "Jamie" in admin_comments and "Great read!" in admin_comments
+    comment_id = re.search(r"/admin/comments/(\d+)/approve", admin_comments).group(1)
+    c.post(f"/admin/comments/{comment_id}/approve", headers=AUTH, data={"_csrf": token})
+    assert "Great read!" in c.get("/stories/meet-the-buttermores").get_data(as_text=True)
+
+    # a returning (now-trusted) commenter is auto-approved
+    r = c.post("/stories/meet-the-buttermores/comments", follow_redirects=True, data={
+        "_csrf": token, "author_name": "Jamie", "author_email": "jamie@example.com", "body": "Second comment.",
+    })
+    assert "Comment posted" in r.get_data(as_text=True)
+    assert "Second comment." in c.get("/stories/meet-the-buttermores").get_data(as_text=True)
+
+    # a reply from an already-trusted email is auto-approved and nests under the parent
+    r = c.post("/stories/meet-the-buttermores/comments", follow_redirects=True, data={
+        "_csrf": token, "author_name": "Jamie", "author_email": "jamie@example.com",
+        "body": "Replying to my own comment.", "parent_id": comment_id,
+    })
+    reply_html = c.get("/stories/meet-the-buttermores").get_data(as_text=True)
+    assert 'comment--reply' in reply_html and "Replying to my own comment." in reply_html
+
+    # deleting the story removes its comments too, not just the story
+    c.post("/admin/stories/1/delete", headers=AUTH, data={"_csrf": token})
+    assert "Replying to my own comment." not in c.get("/admin/comments", headers=AUTH).get_data(as_text=True)
+    assert c.get("/stories/meet-the-buttermores").status_code == 404
+
     print("smoke test OK")
 
 

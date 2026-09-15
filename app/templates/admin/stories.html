@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Stories &ndash; Admin{% endblock %}
+{% block content %}
+<div class="admin-bar">
+  <h1 class="admin-bar__title">Stories</h1>
+  <a class="btn" href="{{ url_for('admin.story_new') }}">+ Add story</a>
+  <a class="btn btn--ghost" href="{{ url_for('admin.comments') }}">Comments</a>
+  <a class="btn btn--ghost" href="{{ url_for('admin.dashboard') }}">Back to admin</a>
+</div>
+{% if stories %}
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Title</th><th>Category</th><th>Status</th><th>Comments</th><th></th></tr></thead>
+  <tbody>
+  {% for s in stories %}
+    <tr>
+      <td>{{ s.title }}</td>
+      <td>{{ s.category }}</td>
+      <td>{{ "Published" if s.published else "Draft" }}</td>
+      <td>{{ s.comment_count }}</td>
+      <td><a href="{{ url_for('admin.story_edit', story_id=s.id) }}">Edit</a></td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div>
+{% else %}
+<p class="empty">No stories yet.</p>
+{% endif %}
+{% endblock %}

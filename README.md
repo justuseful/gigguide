@@ -40,9 +40,28 @@ password; later runs just `git pull`, install requirements and restart.
 | `GIGGUIDE_DATA_DIR` | Where the SQLite DB and uploads live (default `./data`) |
 | `GIGGUIDE_SITE_NAME`, `GIGGUIDE_SITE_TAGLINE`, `GIGGUIDE_TIMEZONE` | Branding and local time zone |
 
+## Stories & comments
+
+`/stories` holds longer-form content (Human of Bundjalung interviews, news) - Markdown body,
+optional hero image and YouTube video, draft/published state. Public visitors can comment
+(name + email, email never shown) with a moderation queue in `/admin/comments`:
+
+- A hidden honeypot field silently discards obvious bots.
+- A visitor's first comment is held for review; once you approve one comment from an email
+  address, later comments from that address post immediately.
+- Comments support one level of replies.
+- Consider adding Cloudflare Turnstile (free) to the comment form once the domain/Cloudflare
+  step is done, for stronger bot protection than the honeypot alone.
+
+The same `comments` table (`target_type`/`target_id`) already supports gig pages too - wiring
+that up later is a small, low-risk addition, not a rebuild.
+
 ## Notes
 
 - Page views are counted server-side (see the admin dashboard). If you later make Cloudflare cache
   HTML, switch to Cloudflare Web Analytics, since cached pages never reach the server.
+- Public pages are cached for 5 minutes (`Cache-Control: max-age=300`) to keep load low on a 1GB
+  box - a browser that already loaded a page (e.g. right after posting a comment) may show a stale
+  copy for up to 5 minutes; a hard refresh always shows the current state. Admin pages are never cached.
 - Featured gigs (paid placement) are pinned to the top of the guide and highlighted.
 - Put Cloudflare in front once a domain is chosen: free SSL, caching and DDoS protection.

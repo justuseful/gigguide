@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% from "_macros.html" import comment_form %}
+{% block title %}{{ story.title }} &ndash; {{ config.SITE_NAME }}{% endblock %}
+{% block description %}{{ story.excerpt or story.title }}{% endblock %}
+{% block content %}
+<article class="story-detail">
+  <span class="badge">{{ story.category }}</span>
+  <h1>{{ story.title }}</h1>
+
+  {% if story.youtube_id %}
+  <div class="yt-facade" data-id="{{ story.youtube_id }}" data-title="{{ story.title }}" role="button" tabindex="0" aria-label="Play video: {{ story.title }}">
+    <img src="https://i.ytimg.com/vi/{{ story.youtube_id }}/hqdefault.jpg" alt="" loading="lazy">
+    <span class="yt-play" aria-hidden="true">&#9654;</span>
+  </div>
+  {% endif %}
+
+  {% if story.hero_image %}
+    <p><img class="flyer" src="{{ url_for('public.uploads', filename=story.hero_image) }}" alt=""></p>
+  {% endif %}
+
+  <div class="story-detail__body">{{ story.body|markdown }}</div>
+</article>
+
+<section id="comments" class="comments">
+  <h2 class="section-title">
+    Discussion ({{ top_comments|length + (replies.values() | map('length') | sum) }})
+  </h2>
+
+  {% if top_comments %}
+    {% for c in top_comments %}
+    <div class="comment">
+      <p class="comment__meta"><strong>{{ c.author_name }}</strong> &middot; {{ c.created_at }}</p>
+      <div class="comment__body">{{ c.body|nl2p }}</div>
+      {% for r in replies.get(c.id, []) %}
+      <div class="comment comment--reply">
+        <p class="comment__meta"><strong>{{ r.author_name }}</strong> &middot; {{ r.created_at }}</p>
+        <div class="comment__body">{{ r.body|nl2p }}</div>
+      </div>
+      {% endfor %}
+      <details class="reply-toggle">
+        <summary>Reply</summary>
+        {{ comment_form(story, parent_id=c.id) }}
+      </details>
+    </div>
+    {% endfor %}
+  {% else %}
+    <p class="empty">No comments yet &mdash; be the first to say something.</p>
+  {% endif %}
+
+  <h3 class="section-title">Leave a comment</h3>
+  {{ comment_form(story) }}
+</section>
+{% endblock %}
