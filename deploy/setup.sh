@@ -22,6 +22,16 @@ if ! swapon --show --noheadings | grep -q /swapfile; then
   grep -q '/swapfile' /etc/fstab || echo '/swapfile none swap sw 0 0' >> /etc/fstab
 fi
 
+# Oracle's Ubuntu images ship iptables rules that reject everything except SSH, and they
+# take effect before UFW's rules. Open the web ports (and alternate SSH port) persistently.
+RULES=/etc/iptables/rules.v4
+if [ -f "$RULES" ] && ! grep -q -- '--dports 80,443,2222' "$RULES"; then
+  sed -i '0,/-A INPUT -j REJECT/s//-A INPUT -p tcp -m state --state NEW -m tcp -m multiport --dports 80,443,2222 -j ACCEPT\n&/' "$RULES"
+  iptables-restore --test "$RULES"
+fi
+iptables -C INPUT -p tcp -m multiport --dports 80,443,2222 -j ACCEPT 2>/dev/null \
+  || iptables -I INPUT -p tcp -m multiport --dports 80,443,2222 -j ACCEPT
+
 id -u gigguide >/dev/null 2>&1 || useradd --system --home /opt/gigguide --shell /usr/sbin/nologin gigguide
 mkdir -p /opt/gigguide "$DATA_DIR/uploads"
 
