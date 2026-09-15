@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% from "_macros.html" import gig_card %}
+{% block title %}{{ gig.title }} at {{ gig.venue_name }} &ndash; {{ config.SITE_NAME }}{% endblock %}
+{% block description %}{{ gig.title }} live at {{ gig.venue_name }}, {{ gig.town }} on {{ gig.gig_date|date('long') }}.{% endblock %}
+{% block content %}
+<article class="gig-detail">
+  {% if gig.featured %}<span class="badge badge--featured">Featured</span>{% endif %}
+  <h1>{{ gig.title }}</h1>
+  <p class="gig-detail__meta">
+    {{ gig.gig_date|date('long') }}{% if gig.start_time %} &middot; {{ gig.start_time|time }}{% endif %}
+    &middot; <a href="{{ url_for('public.venue', slug=gig.venue_slug) }}">{{ gig.venue_name }}</a>, {{ gig.town }}
+    {% if gig.price %} &middot; {{ gig.price }}{% endif %}
+  </p>
+  {% if gig.ticket_url %}
+    <p><a class="btn" href="{{ gig.ticket_url }}" rel="noopener" target="_blank">Tickets</a></p>
+  {% endif %}
+
+  {% if gig.youtube_id %}
+  <div class="yt-facade" data-id="{{ gig.youtube_id }}" data-title="{{ gig.title }}" role="button" tabindex="0" aria-label="Play video: {{ gig.title }}">
+    <img src="https://i.ytimg.com/vi/{{ gig.youtube_id }}/hqdefault.jpg" alt="" loading="lazy">
+    <span class="yt-play" aria-hidden="true">&#9654;</span>
+  </div>
+  {% endif %}
+
+  {% if gig.flyer %}
+    <p><img class="flyer" src="{{ url_for('public.uploads', filename=gig.flyer) }}" alt="Flyer for {{ gig.title }}"></p>
+  {% endif %}
+
+  {% if gig.description %}<div class="gig-detail__desc">{{ gig.description|nl2p }}</div>{% endif %}
+
+  <section class="venue-box">
+    <h2 class="section-title venue-box__title">{{ gig.venue_name }}</h2>
+    {% if gig.venue_address %}<p>{{ gig.venue_address }}</p>{% endif %}
+    {% set links = [] %}
+    {% if gig.venue_website %}{% set _ = links.append(("Website", gig.venue_website)) %}{% endif %}
+    {% if gig.venue_instagram %}{% set _ = links.append(("Instagram", "https://instagram.com/" ~ gig.venue_instagram)) %}{% endif %}
+    {% set _ = links.append(("All gigs at " ~ gig.venue_name, url_for('public.venue', slug=gig.venue_slug))) %}
+    <p>{% for label, href in links %}{% if not loop.first %} &middot; {% endif %}<a href="{{ href }}"{% if href.startswith('http') %} rel="noopener" target="_blank"{% endif %}>{{ label }}</a>{% endfor %}</p>
+  </section>
+</article>
+
+{% if more_at_venue %}
+<h2 class="section-title">More at {{ gig.venue_name }}</h2>
+<div class="card-grid">{% for g in more_at_venue %}{{ gig_card(g, show_date=True) }}{% endfor %}</div>
+{% endif %}
+
+{% if same_night %}
+<h2 class="section-title">Also on {{ gig.gig_date|date }}</h2>
+<div class="card-grid">{% for g in same_night %}{{ gig_card(g) }}{% endfor %}</div>
+{% endif %}
+{% endblock %}

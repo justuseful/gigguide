@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% from "_macros.html" import gig_card %}
+{% block title %}{{ venue.name }} &ndash; {{ config.SITE_NAME }}{% endblock %}
+{% block description %}Upcoming live music at {{ venue.name }}, {{ venue.town }}.{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1>{{ venue.name }}</h1>
+  <p>{{ venue.town }}{% if venue.address %} &middot; {{ venue.address }}{% endif %}</p>
+</section>
+{% if venue.description %}<div>{{ venue.description|nl2p }}</div>{% endif %}
+{% set links = [] %}
+{% if venue.website %}{% set _ = links.append(("Website", venue.website)) %}{% endif %}
+{% if venue.instagram %}{% set _ = links.append(("Instagram", "https://instagram.com/" ~ venue.instagram)) %}{% endif %}
+{% if links %}
+<p>{% for label, href in links %}{% if not loop.first %} &middot; {% endif %}<a href="{{ href }}" rel="noopener" target="_blank">{{ label }}</a>{% endfor %}</p>
+{% endif %}
+
+<h2 class="section-title">Upcoming gigs</h2>
+{% if gigs %}
+<div class="card-grid">{% for g in gigs %}{{ gig_card(g, show_date=True) }}{% endfor %}</div>
+{% else %}
+<p class="empty">Nothing listed here yet.</p>
+{% endif %}
+{% endblock %}

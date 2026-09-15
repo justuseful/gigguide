@@ -1,0 +1,15 @@
+[Unit]
+Description=Gig Guide (gunicorn)
+After=network.target
+
+[Service]
+User=gigguide
+Group=gigguide
+WorkingDirectory=/opt/gigguide/app
+EnvironmentFile=/etc/gigguide.env
+ExecStart=/opt/gigguide/venv/bin/gunicorn --workers 2 --bind 127.0.0.1:8000 --access-logfile - --error-logfile - wsgi:app
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

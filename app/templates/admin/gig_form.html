@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}{{ "Add gig" if is_new else "Edit gig" }} &ndash; Admin{% endblock %}
+{% block content %}
+<div class="admin-bar">
+  <h1 class="admin-bar__title">{{ "Add gig" if is_new else "Edit gig" }}</h1>
+  <a class="btn btn--ghost" href="{{ url_for('admin.dashboard') }}">Back to admin</a>
+</div>
+
+<form method="post" enctype="multipart/form-data" class="form">
+  <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+
+  <div class="field">
+    <label for="venue_id">Venue</label>
+    <select id="venue_id" name="venue_id" required>
+      <option value="">Choose a venue&hellip;</option>
+      {% for v in venues %}
+        <option value="{{ v.id }}" {% if gig.venue_id == v.id %}selected{% endif %}>{{ v.name }} &middot; {{ v.town }}</option>
+      {% endfor %}
+    </select>
+    <small><a href="{{ url_for('admin.venue_new') }}">Add a new venue</a></small>
+  </div>
+
+  <div class="field">
+    <label for="title">Gig / performer</label>
+    <input type="text" id="title" name="title" required maxlength="200" value="{{ gig.title or '' }}">
+  </div>
+
+  <div class="field-row">
+    <div class="field">
+      <label for="gig_date">Date</label>
+      <input type="date" id="gig_date" name="gig_date" required value="{{ gig.gig_date or '' }}">
+    </div>
+    <div class="field">
+      <label for="start_time">Start time</label>
+      <input type="time" id="start_time" name="start_time" value="{{ gig.start_time or '' }}">
+    </div>
+    <div class="field">
+      <label for="price">Price</label>
+      <input type="text" id="price" name="price" placeholder="Free, $20, etc." value="{{ gig.price or '' }}">
+    </div>
+  </div>
+
+  <div class="field">
+    <label for="ticket_url">Ticket link</label>
+    <input type="url" id="ticket_url" name="ticket_url" placeholder="https://" value="{{ gig.ticket_url or '' }}">
+  </div>
+
+  <div class="field">
+    <label for="youtube">YouTube video</label>
+    <input type="text" id="youtube" name="youtube" placeholder="Paste a YouTube link or video ID" value="{{ gig.youtube or gig.youtube_id or '' }}">
+  </div>
+
+  <div class="field">
+    <label for="flyer">Flyer image</label>
+    {% if gig.flyer %}
+      <p><img class="flyer flyer--thumb" src="{{ url_for('public.uploads', filename=gig.flyer) }}" alt="Current flyer"></p>
+      <label class="check"><input type="checkbox" name="remove_flyer" value="1"> Remove current flyer</label>
+    {% endif %}
+    <input type="file" id="flyer" name="flyer" accept="image/png,image/jpeg,image/webp,image/gif">
+    <small>PNG, JPG, WebP or GIF, up to 5MB.</small>
+  </div>
+
+  <div class="field">
+    <label for="description">Description</label>
+    <textarea id="description" name="description">{{ gig.description or '' }}</textarea>
+  </div>
+
+  <div class="field">
+    <label class="check"><input type="checkbox" name="featured" value="1" {% if gig.featured %}checked{% endif %}> Featured (paid placement &ndash; shown at the top of the guide)</label>
+  </div>
+
+  <button class="btn" type="submit">{{ "Add gig" if is_new else "Save changes" }}</button>
+</form>
+
+{% if not is_new %}
+<form method="post" action="{{ url_for('admin.gig_delete', gig_id=gig.id) }}" class="form form--danger" onsubmit="return confirm('Delete this gig? This cannot be undone.');">
+  <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+  <button class="btn btn--danger" type="submit">Delete gig</button>
+</form>
+{% endif %}
+{% endblock %}

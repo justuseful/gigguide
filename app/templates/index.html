@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% from "_macros.html" import gig_card %}
+{% block content %}
+<section class="hero">
+  <h1>What's on</h1>
+  <p>{{ config.SITE_TAGLINE }}</p>
+</section>
+
+{% if featured %}
+<section>
+  <h2 class="day__heading">Featured</h2>
+  <div class="card-grid">
+    {% for gig in featured %}{{ gig_card(gig, show_date=True) }}{% endfor %}
+  </div>
+</section>
+{% endif %}
+
+{% if groups %}
+  {% for day, gigs in groups %}
+  <section>
+    <h2 class="day__heading">
+      {% if day == today %}Today &middot; {% elif day == tomorrow %}Tomorrow &middot; {% endif %}{{ day|date('long') }}
+    </h2>
+    <div class="card-grid">
+      {% for gig in gigs %}{{ gig_card(gig) }}{% endfor %}
+    </div>
+  </section>
+  {% endfor %}
+{% else %}
+  <p class="empty">No upcoming gigs listed yet. Check back soon.</p>
+{% endif %}
+{% endblock %}

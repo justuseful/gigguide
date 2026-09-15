@@ -1,0 +1,17 @@
+{% macro gig_card(gig, show_date=False) %}
+<article class="gig-card{% if gig.featured %} is-featured{% endif %}">
+  <a class="gig-card__link" href="{{ url_for('public.gig', gig_id=gig.id) }}">
+    {% if gig.flyer %}
+      <img class="gig-card__flyer" src="{{ url_for('public.uploads', filename=gig.flyer) }}" alt="" loading="lazy">
+    {% endif %}
+    <div class="gig-card__body">
+      <h3 class="gig-card__title">{{ gig.title }}</h3>
+      <p class="gig-card__meta">
+        {% if show_date %}{{ gig.gig_date|date }} &middot; {% endif %}{% if gig.start_time %}{{ gig.start_time|time }} &middot; {% endif %}{{ gig.venue_name }}, {{ gig.town }}{% if gig.price %} &middot; {{ gig.price }}{% endif %}
+      </p>
+      {% if gig.featured %}<span class="badge badge--featured">Featured</span>{% endif %}
+      {% if gig.youtube_id %}<span class="badge badge--video">&#9654; Video</span>{% endif %}
+    </div>
+  </a>
+</article>
+{% endmacro %}

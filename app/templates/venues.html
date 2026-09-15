@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Venues &ndash; {{ config.SITE_NAME }}{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1>Venues</h1>
+  <p>Where the music happens.</p>
+</section>
+{% if venues %}
+<ul class="list-plain">
+  {% for v in venues %}
+  <li>
+    <a href="{{ url_for('public.venue', slug=v.slug) }}"><strong>{{ v.name }}</strong></a>
+    <span class="muted">&middot; {{ v.town }} &middot; {{ v.upcoming }} upcoming</span>
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p class="empty">No venues yet.</p>
+{% endif %}
+{% endblock %}
