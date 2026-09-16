@@ -50,6 +50,7 @@ def create_app(test_config: dict | None = None) -> Flask:
         MAX_CONTENT_LENGTH=5 * 1024 * 1024,
         SESSION_COOKIE_SAMESITE="Lax",
         SESSION_COOKIE_HTTPONLY=True,
+        SESSION_COOKIE_SECURE=os.environ.get("GIGGUIDE_FORCE_HTTPS", "1") == "1",
     )
     if test_config:
         app.config.update(test_config)
