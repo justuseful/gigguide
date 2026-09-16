@@ -26,3 +26,18 @@ def register_cli(app):
 
         added, skipped = import_venues(json_file)
         click.echo(f"Added {added} new venue(s), skipped {skipped} already present.")
+
+    @app.cli.command("import-gigs")
+    @click.argument("json_file", type=click.Path(exists=True))
+    def import_gigs_command(json_file):
+        """Import gigs from a JSON file like app/data/echo_gigs.json.
+        Skips gigs that already exist (matched by venue + date + time + title).
+        Gigs whose venue name doesn't match one already in the venues table are
+        skipped and counted as unmatched, rather than guessed at."""
+        from .import_gigs import import_gigs
+
+        added, skipped, unmatched = import_gigs(json_file)
+        click.echo(
+            f"Added {added} new gig(s), skipped {skipped} already present, "
+            f"{unmatched} unmatched venue(s)."
+        )
