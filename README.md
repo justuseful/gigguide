@@ -39,6 +39,15 @@ password; later runs just `git pull`, install requirements and restart.
 | `GIGGUIDE_ADMIN_USER` / `GIGGUIDE_ADMIN_PASSWORD` | Admin login (HTTP Basic). Admin is disabled if no password is set |
 | `GIGGUIDE_DATA_DIR` | Where the SQLite DB and uploads live (default `./data`) |
 | `GIGGUIDE_SITE_NAME`, `GIGGUIDE_SITE_TAGLINE`, `GIGGUIDE_TIMEZONE` | Branding and local time zone |
+| `GIGGUIDE_PATREON_URL`, `GIGGUIDE_KOFI_URL`, `GIGGUIDE_PAYPAL_URL` | Links shown on `/support`. Unset ones are hidden — add them once you've created the accounts |
+
+## Support page
+
+`/support` links out to whichever of Patreon, Ko-fi and PayPal are configured (see env vars
+above) so people can help cover hosting costs. No payment processing happens on this site —
+it's just outbound links, so there's no card data, webhooks or user accounts to build or secure.
+To add a link: create the account on that platform yourself, then set the matching env var in
+`/etc/gigguide.env` and `systemctl restart gigguide` (or re-run `deploy/setup.sh`).
 
 ## Stories & comments
 

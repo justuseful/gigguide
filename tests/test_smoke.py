@@ -26,6 +26,13 @@ def test_smoke():
     assert c.get("/healthz").json == {"ok": True}
     assert c.get("/nope").status_code == 404
 
+    # support page: hidden when no links are configured, shown once one is set
+    assert "Support options are coming soon" in c.get("/support").get_data(as_text=True)
+    app.config["SUPPORT_PATREON_URL"] = "https://patreon.com/example"
+    support_html = c.get("/support").get_data(as_text=True)
+    assert "Support on Patreon" in support_html and 'href="https://patreon.com/example"' in support_html
+    app.config["SUPPORT_PATREON_URL"] = ""
+
     # admin is protected
     assert c.get("/admin/").status_code == 401
     assert c.get("/admin/", headers={"Authorization": "Basic " + base64.b64encode(b"admin:wrong").decode()}).status_code == 401

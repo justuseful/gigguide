@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Support the Guide &ndash; {{ config.SITE_NAME }}{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1>Support the Guide</h1>
+  <p>{{ config.SITE_NAME }} is free for venues, performers and gig-goers. If it's useful to you, a
+     few dollars a month (or a one-off tip) helps cover hosting and the time it takes to keep
+     listings accurate.</p>
+</section>
+{% if options %}
+<div class="card-grid">
+  {% for o in options %}
+  <div class="venue-box">
+    <h3 class="venue-box__title">{{ o.name }}</h3>
+    <p class="muted">{{ o.blurb }}</p>
+    <a class="btn" href="{{ o.url }}" rel="noopener" target="_blank">Support on {{ o.name }}</a>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<p class="empty">Support options are coming soon.</p>
+{% endif %}
+{% endblock %}

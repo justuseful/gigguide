@@ -129,6 +129,7 @@ def healthz():
     return {"ok": True}
 
 
-# Registers additional routes (stories, comments, performers) onto this same blueprint.
+# Registers additional routes (stories, comments, performers, support) onto this same blueprint.
 from . import routes_stories  # noqa: E402,F401
 from . import routes_performers  # noqa: E402,F401
+from . import routes_support  # noqa: E402,F401
