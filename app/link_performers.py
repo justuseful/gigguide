@@ -8,7 +8,8 @@ from .util import slugify, unique_slug
 # (e.g. "Joe Camilleri & The Black Sorrows"), so a lineup written as
 # "A, B & C" ends up as two performers ("A", "B & C") rather than three -
 # an acceptable imperfection given how ambiguous "&" is on its own.
-SPLIT_RE = re.compile(r"\s*[+,]\s*")
+SPLIT_ON_PLUS_AND_COMMA = re.compile(r"\s*[+,]\s*")
+SPLIT_ON_PLUS_ONLY = re.compile(r"\s*\+\s*")
 
 # Titles that describe a screening/exhibition rather than a performing act -
 # not worth creating a "performer" entity for.
@@ -22,7 +23,12 @@ SKIP_PATTERNS = [
 def extract_performer_names(title: str) -> list[str]:
     if any(p.search(title) for p in SKIP_PATTERNS):
         return []
-    return [p.strip() for p in SPLIT_RE.split(title) if p.strip()]
+    # A colon usually means "Show name: descriptive subtitle" rather than a
+    # lineup, and that subtitle often has its own comma
+    # (e.g. "ReWilding Red Riding Hood: Ancestral Tales of Daring, Difficult
+    # Women") - splitting on comma there would wrongly carve up the subtitle.
+    splitter = SPLIT_ON_PLUS_ONLY if ":" in title else SPLIT_ON_PLUS_AND_COMMA
+    return [p.strip() for p in splitter.split(title) if p.strip()]
 
 
 def get_or_create_performer(db, name: str) -> tuple[int, bool]:
