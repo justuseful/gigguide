@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Performers &ndash; {{ config.SITE_NAME }}{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1>Performers</h1>
+  <p>The people making the music.</p>
+</section>
+{% if performers %}
+<ul class="list-plain">
+  {% for p in performers %}
+  <li>
+    <a href="{{ url_for('public.performer', slug=p.slug) }}"><strong>{{ p.name }}</strong></a>
+    <span class="muted">&middot; {{ p.upcoming }} upcoming</span>
+    {% if p.youtube_id %}<span class="badge badge--video">&#9654; Video</span>{% endif %}
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p class="empty">No performers yet.</p>
+{% endif %}
+{% endblock %}

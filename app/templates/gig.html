@@ -11,6 +11,9 @@
     &middot; <a href="{{ url_for('public.venue', slug=gig.venue_slug) }}">{{ gig.venue_name }}</a>, {{ gig.town }}
     {% if gig.price %} &middot; {{ gig.price }}{% endif %}
   </p>
+  {% if performers %}
+  <p class="gig-detail__performers">{% for p in performers %}{% if not loop.first %} &middot; {% endif %}<a href="{{ url_for('public.performer', slug=p.slug) }}">{{ p.name }}</a>{% endfor %}</p>
+  {% endif %}
   {% if gig.ticket_url %}
     <p><a class="btn" href="{{ gig.ticket_url }}" rel="noopener" target="_blank">Tickets</a></p>
   {% endif %}

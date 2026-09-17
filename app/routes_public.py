@@ -84,7 +84,14 @@ def gig(gig_id):
         "ORDER BY g.gig_date, g.start_time LIMIT 6",
         (row["venue_id"], gig_id, today_local().isoformat()),
     ).fetchall()
-    return render_template("gig.html", gig=row, same_night=same_night, more_at_venue=more_at_venue)
+    performers = db.execute(
+        "SELECT p.slug, p.name FROM performers p JOIN gig_performers gp ON gp.performer_id = p.id "
+        "WHERE gp.gig_id = ? ORDER BY p.name",
+        (gig_id,),
+    ).fetchall()
+    return render_template(
+        "gig.html", gig=row, same_night=same_night, more_at_venue=more_at_venue, performers=performers
+    )
 
 
 @bp.get("/venues")
@@ -122,5 +129,6 @@ def healthz():
     return {"ok": True}
 
 
-# Registers additional routes (stories, comments) onto this same blueprint.
+# Registers additional routes (stories, comments, performers) onto this same blueprint.
 from . import routes_stories  # noqa: E402,F401
+from . import routes_performers  # noqa: E402,F401

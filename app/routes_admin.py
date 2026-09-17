@@ -84,6 +84,7 @@ def _gig_form_data() -> dict:
         "youtube": (f.get("youtube") or "").strip(),
         "description": (f.get("description") or "").strip() or None,
         "featured": 1 if f.get("featured") else 0,
+        "performer_ids": f.getlist("performer_ids", type=int),
     }
 
 
@@ -113,6 +114,19 @@ def _validate_gig(data: dict, db) -> list[str]:
 
 def _venue_choices(db):
     return db.execute("SELECT id, name, town FROM venues ORDER BY name").fetchall()
+
+
+def _performer_choices(db):
+    return db.execute("SELECT id, name FROM performers ORDER BY name").fetchall()
+
+
+def _set_gig_performers(db, gig_id: int, performer_ids: list[int]):
+    db.execute("DELETE FROM gig_performers WHERE gig_id = ?", (gig_id,))
+    if performer_ids:
+        db.executemany(
+            "INSERT OR IGNORE INTO gig_performers (gig_id, performer_id) VALUES (?, ?)",
+            [(gig_id, pid) for pid in set(performer_ids)],
+        )
 
 
 # ---------- dashboard ----------
@@ -155,6 +169,7 @@ def dashboard():
 def gig_new():
     db = get_db()
     venues = _venue_choices(db)
+    performers = _performer_choices(db)
     if request.method == "POST":
         data = _gig_form_data()
         errors = _validate_gig(data, db)
@@ -167,8 +182,11 @@ def gig_new():
         if errors:
             for message in errors:
                 flash(message, "error")
-            return render_template("admin/gig_form.html", gig=data, venues=venues, is_new=True), 400
-        db.execute(
+            return render_template(
+                "admin/gig_form.html", gig=data, venues=venues, performers=performers,
+                selected_performer_ids=set(data["performer_ids"]), is_new=True,
+            ), 400
+        cur = db.execute(
             "INSERT INTO gigs (venue_id, title, gig_date, start_time, price, ticket_url, "
             "youtube_id, flyer, description, featured) VALUES (?,?,?,?,?,?,?,?,?,?)",
             (
@@ -176,11 +194,15 @@ def gig_new():
                 data["ticket_url"], data["youtube_id"], flyer, data["description"], data["featured"],
             ),
         )
+        _set_gig_performers(db, cur.lastrowid, data["performer_ids"])
         db.commit()
         flash("Gig added.", "ok")
         return redirect(url_for("admin.dashboard"))
     preset = {"venue_id": request.args.get("venue", type=int)}
-    return render_template("admin/gig_form.html", gig=preset, venues=venues, is_new=True)
+    return render_template(
+        "admin/gig_form.html", gig=preset, venues=venues, performers=performers,
+        selected_performer_ids=set(), is_new=True,
+    )
 
 
 @bp.route("/gigs/<int:gig_id>/edit", methods=["GET", "POST"])
@@ -190,6 +212,11 @@ def gig_edit(gig_id):
     if gig is None:
         return render_template("404.html"), 404
     venues = _venue_choices(db)
+    performers = _performer_choices(db)
+    current_performer_ids = {
+        row["performer_id"] for row in
+        db.execute("SELECT performer_id FROM gig_performers WHERE gig_id = ?", (gig_id,)).fetchall()
+    }
     if request.method == "POST":
         data = _gig_form_data()
         errors = _validate_gig(data, db)
@@ -204,7 +231,10 @@ def gig_edit(gig_id):
                 flash(message, "error")
             data["id"] = gig_id
             data["flyer"] = gig["flyer"]
-            return render_template("admin/gig_form.html", gig=data, venues=venues, is_new=False), 400
+            return render_template(
+                "admin/gig_form.html", gig=data, venues=venues, performers=performers,
+                selected_performer_ids=set(data["performer_ids"]), is_new=False,
+            ), 400
         flyer = gig["flyer"]
         if new_flyer or request.form.get("remove_flyer"):
             delete_flyer(gig["flyer"])
@@ -217,10 +247,14 @@ def gig_edit(gig_id):
                 data["ticket_url"], data["youtube_id"], flyer, data["description"], data["featured"], gig_id,
             ),
         )
+        _set_gig_performers(db, gig_id, data["performer_ids"])
         db.commit()
         flash("Gig updated.", "ok")
         return redirect(url_for("admin.dashboard"))
-    return render_template("admin/gig_form.html", gig=gig, venues=venues, is_new=False)
+    return render_template(
+        "admin/gig_form.html", gig=gig, venues=venues, performers=performers,
+        selected_performer_ids=current_performer_ids, is_new=False,
+    )
 
 
 @bp.post("/gigs/<int:gig_id>/delete")
@@ -317,5 +351,6 @@ def venue_edit(venue_id):
     return render_template("admin/venue_form.html", venue=venue, is_new=False)
 
 
-# Registers additional routes (stories, comment moderation) onto this same blueprint.
+# Registers additional routes (stories, comment moderation, performers) onto this same blueprint.
 from . import routes_admin_stories  # noqa: E402,F401
+from . import routes_admin_performers  # noqa: E402,F401

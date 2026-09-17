@@ -51,6 +51,20 @@
   </div>
 
   <div class="field">
+    <label>Performers</label>
+    {% if performers %}
+    <div class="check-list">
+      {% for p in performers %}
+        <label class="check"><input type="checkbox" name="performer_ids" value="{{ p.id }}" {% if p.id in selected_performer_ids %}checked{% endif %}> {{ p.name }}</label>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="muted">No performers yet.</p>
+    {% endif %}
+    <small><a href="{{ url_for('admin.performer_new', next=request.full_path) }}">Add a new performer</a></small>
+  </div>
+
+  <div class="field">
     <label for="flyer">Flyer image</label>
     {% if gig.flyer %}
       <p><img class="flyer flyer--thumb" src="{{ url_for('public.uploads', filename=gig.flyer) }}" alt="Current flyer"></p>

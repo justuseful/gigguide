@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% from "_macros.html" import gig_card %}
+{% block title %}{{ performer.name }} &ndash; {{ config.SITE_NAME }}{% endblock %}
+{% block description %}{{ performer.name }} &ndash; upcoming gigs across Byron Bay and the Northern Rivers.{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1>{{ performer.name }}</h1>
+</section>
+
+{% if performer.youtube_id %}
+<div class="yt-facade" data-id="{{ performer.youtube_id }}" data-title="{{ performer.name }}" role="button" tabindex="0" aria-label="Play video: {{ performer.name }}">
+  <img src="https://i.ytimg.com/vi/{{ performer.youtube_id }}/hqdefault.jpg" alt="" loading="lazy">
+  <span class="yt-play" aria-hidden="true">&#9654;</span>
+</div>
+{% endif %}
+
+{% if performer.bio %}<div>{{ performer.bio|nl2p }}</div>{% endif %}
+
+{% set links = [] %}
+{% if performer.website %}{% set _ = links.append(("Website", performer.website)) %}{% endif %}
+{% if performer.instagram %}{% set _ = links.append(("Instagram", "https://instagram.com/" ~ performer.instagram)) %}{% endif %}
+{% if links %}
+<p>{% for label, href in links %}{% if not loop.first %} &middot; {% endif %}<a href="{{ href }}" rel="noopener" target="_blank">{{ label }}</a>{% endfor %}</p>
+{% endif %}
+
+<h2 class="section-title">Upcoming gigs</h2>
+{% if upcoming %}
+<div class="card-grid">{% for g in upcoming %}{{ gig_card(g, show_date=True) }}{% endfor %}</div>
+{% else %}
+<p class="empty">Nothing listed yet.</p>
+{% endif %}
+
+{% if past %}
+<h2 class="section-title">Past gigs</h2>
+<div class="card-grid">{% for g in past %}{{ gig_card(g, show_date=True) }}{% endfor %}</div>
+{% endif %}
+{% endblock %}

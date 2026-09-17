@@ -30,6 +30,25 @@ CREATE TABLE IF NOT EXISTS gigs (
 CREATE INDEX IF NOT EXISTS idx_gigs_date  ON gigs(gig_date);
 CREATE INDEX IF NOT EXISTS idx_gigs_venue ON gigs(venue_id);
 
+CREATE TABLE IF NOT EXISTS performers (
+    id          INTEGER PRIMARY KEY,
+    slug        TEXT NOT NULL UNIQUE,
+    name        TEXT NOT NULL,
+    bio         TEXT,
+    instagram   TEXT,
+    website     TEXT,
+    youtube_id  TEXT,          -- a default/featured video for their profile page
+    created_at  TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+CREATE TABLE IF NOT EXISTS gig_performers (
+    gig_id       INTEGER NOT NULL REFERENCES gigs(id) ON DELETE CASCADE,
+    performer_id INTEGER NOT NULL REFERENCES performers(id) ON DELETE CASCADE,
+    PRIMARY KEY (gig_id, performer_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_gig_performers_performer ON gig_performers(performer_id);
+
 CREATE TABLE IF NOT EXISTS page_views (
     day   TEXT NOT NULL,
     path  TEXT NOT NULL,
