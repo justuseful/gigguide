@@ -28,6 +28,7 @@ MIGRATIONS = [
     ("gigs", "social_url", "TEXT"),
     ("performers", "social_url", "TEXT"),
     ("stories", "social_url", "TEXT"),
+    ("venues", "facebook_page_id", "TEXT"),
 ]
 
 

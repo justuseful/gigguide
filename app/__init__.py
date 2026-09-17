@@ -47,6 +47,8 @@ def create_app(test_config: dict | None = None) -> Flask:
             "GIGGUIDE_SITE_TAGLINE", "Live music across Byron Bay and the Northern Rivers"
         ),
         TIMEZONE=os.environ.get("GIGGUIDE_TIMEZONE", "Australia/Sydney"),
+        FACEBOOK_APP_ID=os.environ.get("FACEBOOK_APP_ID", ""),
+        FACEBOOK_APP_SECRET=os.environ.get("FACEBOOK_APP_SECRET", ""),
         MAX_CONTENT_LENGTH=5 * 1024 * 1024,
         SESSION_COOKIE_SAMESITE="Lax",
         SESSION_COOKIE_HTTPONLY=True,
