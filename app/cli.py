@@ -54,6 +54,18 @@ def register_cli(app):
         moved, keep_name, remove_name = merge_venues(keep_slug, remove_slug)
         click.echo(f"Moved {moved} gig(s) from '{remove_name}' into '{keep_name}'. '{remove_name}' deleted.")
 
+    @app.cli.command("merge-performers")
+    @click.argument("keep_slug")
+    @click.argument("remove_slug")
+    def merge_performers_command(keep_slug, remove_slug):
+        """Move all gig links from REMOVE_SLUG onto KEEP_SLUG, then delete REMOVE_SLUG.
+        For duplicate performers (e.g. a typo or "Matt"/"Matthew"-style name
+        variant picked up by the Echo scrape)."""
+        from .merge_performers import merge_performers
+
+        moved, keep_name, remove_name = merge_performers(keep_slug, remove_slug)
+        click.echo(f"Moved {moved} gig link(s) from '{remove_name}' into '{keep_name}'. '{remove_name}' deleted.")
+
     @app.cli.command("link-performers")
     def link_performers_command():
         """Backfill performer links for every existing gig by splitting its
