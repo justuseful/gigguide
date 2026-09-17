@@ -108,6 +108,10 @@ img { max-width: 100%; }
 }
 .yt-facade:hover .yt-play, .yt-facade:focus .yt-play { color: var(--accent); }
 
+.social-embed { max-width: 500px; margin: 1rem 0; }
+.social-embed iframe { width: 100%; max-width: 100%; border: 0; border-radius: var(--radius); display: block; }
+.social-embed__link { margin-top: 0.4rem; font-size: 0.9rem; }
+
 .flyer { border-radius: var(--radius); border: 1px solid var(--line); }
 .flyer--thumb { max-height: 12rem; width: auto; }
 

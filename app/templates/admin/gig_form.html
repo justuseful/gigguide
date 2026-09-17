@@ -51,6 +51,12 @@
   </div>
 
   <div class="field">
+    <label for="social">Instagram or Facebook video/post link</label>
+    <input type="text" id="social" name="social" placeholder="https://instagram.com/reel/... or https://facebook.com/.../videos/..." value="{{ gig.social or gig.social_url or '' }}">
+    <small>Shown embedded on the page, with a plain link to open it on Instagram/Facebook as well.</small>
+  </div>
+
+  <div class="field">
     <label>Performers</label>
     {% if performers %}
     <div class="check-list">

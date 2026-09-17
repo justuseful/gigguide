@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from "_macros.html" import comment_form %}
+{% from "_macros.html" import comment_form, social_embed %}
 {% block title %}{{ story.title }} &ndash; {{ config.SITE_NAME }}{% endblock %}
 {% block description %}{{ story.excerpt or story.title }}{% endblock %}
 {% block content %}
@@ -13,6 +13,8 @@
     <span class="yt-play" aria-hidden="true">&#9654;</span>
   </div>
   {% endif %}
+
+  {{ social_embed(story.social_url) }}
 
   {% if story.hero_image %}
     <p><img class="flyer" src="{{ url_for('public.uploads', filename=story.hero_image) }}" alt=""></p>

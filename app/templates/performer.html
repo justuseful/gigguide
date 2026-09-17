@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from "_macros.html" import gig_card %}
+{% from "_macros.html" import gig_card, social_embed %}
 {% block title %}{{ performer.name }} &ndash; {{ config.SITE_NAME }}{% endblock %}
 {% block description %}{{ performer.name }} &ndash; upcoming gigs across Byron Bay and the Northern Rivers.{% endblock %}
 {% block content %}
@@ -13,6 +13,8 @@
   <span class="yt-play" aria-hidden="true">&#9654;</span>
 </div>
 {% endif %}
+
+{{ social_embed(performer.social_url) }}
 
 {% if performer.bio %}<div>{{ performer.bio|nl2p }}</div>{% endif %}
 

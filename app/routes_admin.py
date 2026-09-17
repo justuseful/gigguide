@@ -15,6 +15,8 @@ bp = Blueprint("admin", __name__)
 ALLOWED_IMAGE_EXT = {"png", "jpg", "jpeg", "webp", "gif"}
 YOUTUBE_ID_RE = re.compile(r"^[A-Za-z0-9_-]{11}$")
 YOUTUBE_URL_RE = re.compile(r"(?:v=|youtu\.be/|/shorts/|/embed/|/live/)([A-Za-z0-9_-]{11})")
+INSTAGRAM_URL_RE = re.compile(r"^https?://(?:www\.)?instagram\.com/(?:p|reel|tv)/[A-Za-z0-9_-]+/?")
+FACEBOOK_HOST_RE = re.compile(r"^https?://(?:www\.|m\.)?(?:facebook\.com|fb\.watch)/")
 
 
 @bp.before_request
@@ -42,6 +44,19 @@ def parse_youtube_id(value: str) -> str:
     if not match:
         raise ValueError("Couldn't find a YouTube video ID in that link.")
     return match.group(1)
+
+
+def parse_social_url(value: str) -> str:
+    """Accepts a public Instagram post/reel or Facebook post/video link and
+    returns it cleaned up, or '' if nothing was entered. Anything else raises."""
+    value = (value or "").strip()
+    if not value:
+        return ""
+    if not re.match(r"^https?://", value):
+        value = "https://" + value
+    if INSTAGRAM_URL_RE.match(value) or FACEBOOK_HOST_RE.match(value):
+        return value
+    raise ValueError("That doesn't look like an Instagram or Facebook post/video link.")
 
 
 def save_flyer(file) -> str | None:
@@ -83,6 +98,7 @@ def _gig_form_data() -> dict:
         "price": (f.get("price") or "").strip() or None,
         "ticket_url": (f.get("ticket_url") or "").strip() or None,
         "youtube": (f.get("youtube") or "").strip(),
+        "social": (f.get("social") or "").strip(),
         "description": (f.get("description") or "").strip() or None,
         "featured": 1 if f.get("featured") else 0,
         "performer_ids": f.getlist("performer_ids", type=int),
@@ -109,6 +125,10 @@ def _validate_gig(data: dict, db) -> list[str]:
             errors.append(str(exc))
     try:
         data["youtube_id"] = parse_youtube_id(data["youtube"]) or None
+    except ValueError as exc:
+        errors.append(str(exc))
+    try:
+        data["social_url"] = parse_social_url(data["social"]) or None
     except ValueError as exc:
         errors.append(str(exc))
     return errors
@@ -191,10 +211,11 @@ def gig_new():
             ), 400
         cur = db.execute(
             "INSERT INTO gigs (venue_id, title, gig_date, start_time, price, ticket_url, "
-            "youtube_id, flyer, description, featured) VALUES (?,?,?,?,?,?,?,?,?,?)",
+            "youtube_id, social_url, flyer, description, featured) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
             (
                 data["venue_id"], data["title"], data["gig_date"], data["start_time"], data["price"],
-                data["ticket_url"], data["youtube_id"], flyer, data["description"], data["featured"],
+                data["ticket_url"], data["youtube_id"], data["social_url"], flyer, data["description"],
+                data["featured"],
             ),
         )
         new_id = cur.lastrowid
@@ -251,10 +272,11 @@ def gig_edit(gig_id):
             flyer = new_flyer
         db.execute(
             "UPDATE gigs SET venue_id=?, title=?, gig_date=?, start_time=?, price=?, ticket_url=?, "
-            "youtube_id=?, flyer=?, description=?, featured=?, updated_at=datetime('now') WHERE id=?",
+            "youtube_id=?, social_url=?, flyer=?, description=?, featured=?, updated_at=datetime('now') WHERE id=?",
             (
                 data["venue_id"], data["title"], data["gig_date"], data["start_time"], data["price"],
-                data["ticket_url"], data["youtube_id"], flyer, data["description"], data["featured"], gig_id,
+                data["ticket_url"], data["youtube_id"], data["social_url"], flyer, data["description"],
+                data["featured"], gig_id,
             ),
         )
         _set_gig_performers(db, gig_id, data["performer_ids"])

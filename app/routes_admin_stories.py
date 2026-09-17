@@ -4,7 +4,7 @@ from flask import flash, redirect, render_template, request, url_for
 
 from .db import get_db
 from .images import delete_image, save_image
-from .routes_admin import bp, parse_youtube_id
+from .routes_admin import bp, parse_social_url, parse_youtube_id
 from .util import slugify, unique_slug
 
 CATEGORIES = ["Human of Bundjalung", "Interview", "News", "Story"]
@@ -18,6 +18,7 @@ def _story_form_data() -> dict:
         "excerpt": (f.get("excerpt") or "").strip() or None,
         "body": (f.get("body") or "").strip(),
         "youtube": (f.get("youtube") or "").strip(),
+        "social": (f.get("social") or "").strip(),
         "published": 1 if f.get("published") else 0,
     }
 
@@ -30,6 +31,10 @@ def _validate_story(data: dict) -> list[str]:
         errors.append("Body is required.")
     try:
         data["youtube_id"] = parse_youtube_id(data["youtube"]) or None
+    except ValueError as exc:
+        errors.append(str(exc))
+    try:
+        data["social_url"] = parse_social_url(data["social"]) or None
     except ValueError as exc:
         errors.append(str(exc))
     return errors
@@ -69,9 +74,9 @@ def story_new():
         published_at = datetime.now(timezone.utc).isoformat() if data["published"] else None
         db.execute(
             "INSERT INTO stories (slug, title, category, excerpt, body, hero_image, youtube_id, "
-            "published, published_at) VALUES (?,?,?,?,?,?,?,?,?)",
+            "social_url, published, published_at) VALUES (?,?,?,?,?,?,?,?,?,?)",
             (slug, data["title"], data["category"], data["excerpt"], data["body"], hero_image,
-             data["youtube_id"], data["published"], published_at),
+             data["youtube_id"], data["social_url"], data["published"], published_at),
         )
         db.commit()
         flash("Story added.", "ok")
@@ -111,9 +116,9 @@ def story_edit(story_id):
             published_at = None
         db.execute(
             "UPDATE stories SET title=?, category=?, excerpt=?, body=?, hero_image=?, youtube_id=?, "
-            "published=?, published_at=?, updated_at=datetime('now') WHERE id=?",
+            "social_url=?, published=?, published_at=?, updated_at=datetime('now') WHERE id=?",
             (data["title"], data["category"], data["excerpt"], data["body"], hero_image,
-             data["youtube_id"], data["published"], published_at, story_id),
+             data["youtube_id"], data["social_url"], data["published"], published_at, story_id),
         )
         db.commit()
         flash("Story updated.", "ok")

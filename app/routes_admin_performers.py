@@ -1,7 +1,7 @@
 from flask import flash, redirect, render_template, request, url_for
 
 from .db import get_db
-from .routes_admin import bp, parse_youtube_id
+from .routes_admin import bp, parse_social_url, parse_youtube_id
 from .util import slugify, unique_slug
 
 
@@ -13,6 +13,7 @@ def _performer_form_data() -> dict:
         "instagram": (f.get("instagram") or "").strip().lstrip("@") or None,
         "website": (f.get("website") or "").strip() or None,
         "youtube": (f.get("youtube") or "").strip(),
+        "social": (f.get("social") or "").strip(),
     }
 
 
@@ -22,6 +23,10 @@ def _validate_performer(data: dict) -> list[str]:
         errors.append("Performer name is required.")
     try:
         data["youtube_id"] = parse_youtube_id(data["youtube"]) or None
+    except ValueError as exc:
+        errors.append(str(exc))
+    try:
+        data["social_url"] = parse_social_url(data["social"]) or None
     except ValueError as exc:
         errors.append(str(exc))
     return errors
@@ -51,8 +56,10 @@ def performer_new():
             return render_template("admin/performer_form.html", performer=data, is_new=True), 400
         slug = unique_slug(db, "performers", slugify(data["name"]))
         db.execute(
-            "INSERT INTO performers (slug, name, bio, instagram, website, youtube_id) VALUES (?,?,?,?,?,?)",
-            (slug, data["name"], data["bio"], data["instagram"], data["website"], data["youtube_id"]),
+            "INSERT INTO performers (slug, name, bio, instagram, website, youtube_id, social_url) "
+            "VALUES (?,?,?,?,?,?,?)",
+            (slug, data["name"], data["bio"], data["instagram"], data["website"], data["youtube_id"],
+             data["social_url"]),
         )
         db.commit()
         flash("Performer added.", "ok")
@@ -75,8 +82,9 @@ def performer_edit(performer_id):
             data["id"] = performer_id
             return render_template("admin/performer_form.html", performer=data, is_new=False), 400
         db.execute(
-            "UPDATE performers SET name=?, bio=?, instagram=?, website=?, youtube_id=? WHERE id=?",
-            (data["name"], data["bio"], data["instagram"], data["website"], data["youtube_id"], performer_id),
+            "UPDATE performers SET name=?, bio=?, instagram=?, website=?, youtube_id=?, social_url=? WHERE id=?",
+            (data["name"], data["bio"], data["instagram"], data["website"], data["youtube_id"],
+             data["social_url"], performer_id),
         )
         db.commit()
         flash("Performer updated.", "ok")

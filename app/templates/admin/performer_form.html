@@ -29,6 +29,10 @@
     <input type="text" id="youtube" name="youtube" placeholder="Paste a YouTube link or video ID" value="{{ performer.youtube or performer.youtube_id or '' }}">
     <small>Shown on the performer's profile page &ndash; a good highlight clip works well here.</small>
   </div>
+  <div class="field">
+    <label for="social">Instagram or Facebook video/post link</label>
+    <input type="text" id="social" name="social" placeholder="https://instagram.com/reel/... or https://facebook.com/.../videos/..." value="{{ performer.social or performer.social_url or '' }}">
+  </div>
   <button class="btn" type="submit">{{ "Add performer" if is_new else "Save changes" }}</button>
 </form>
 

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from "_macros.html" import gig_card %}
+{% from "_macros.html" import gig_card, social_embed %}
 {% block title %}{{ gig.title }} at {{ gig.venue_name }} &ndash; {{ config.SITE_NAME }}{% endblock %}
 {% block description %}{{ gig.title }} live at {{ gig.venue_name }}, {{ gig.town }} on {{ gig.gig_date|date('long') }}.{% endblock %}
 {% block content %}
@@ -24,6 +24,8 @@
     <span class="yt-play" aria-hidden="true">&#9654;</span>
   </div>
   {% endif %}
+
+  {{ social_embed(gig.social_url) }}
 
   {% if gig.flyer %}
     <p><img class="flyer" src="{{ url_for('public.uploads', filename=gig.flyer) }}" alt="Flyer for {{ gig.title }}"></p>

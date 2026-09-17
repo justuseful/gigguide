@@ -19,6 +19,7 @@ CREATE TABLE IF NOT EXISTS gigs (
     price       TEXT,
     ticket_url  TEXT,
     youtube_id  TEXT,
+    social_url  TEXT,                       -- Instagram or Facebook post/video link
     flyer       TEXT,                       -- filename inside the uploads dir
     description TEXT,
     featured    INTEGER NOT NULL DEFAULT 0,
@@ -42,6 +43,7 @@ CREATE TABLE IF NOT EXISTS performers (
     instagram   TEXT,
     website     TEXT,
     youtube_id  TEXT,          -- a default/featured video for their profile page
+    social_url  TEXT,          -- Instagram or Facebook post/video link
     created_at  TEXT NOT NULL DEFAULT (datetime('now'))
 );
 
@@ -69,6 +71,7 @@ CREATE TABLE IF NOT EXISTS stories (
     body         TEXT NOT NULL,          -- Markdown, written by the (trusted) admin
     hero_image   TEXT,                   -- filename inside the uploads dir
     youtube_id   TEXT,
+    social_url   TEXT,                   -- Instagram or Facebook post/video link
     published    INTEGER NOT NULL DEFAULT 0,
     published_at TEXT,
     created_at   TEXT NOT NULL DEFAULT (datetime('now')),

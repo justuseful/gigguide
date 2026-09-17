@@ -34,6 +34,11 @@
   </div>
 
   <div class="field">
+    <label for="social">Instagram or Facebook video/post link</label>
+    <input type="text" id="social" name="social" placeholder="https://instagram.com/reel/... or https://facebook.com/.../videos/..." value="{{ story.social or story.social_url or '' }}">
+  </div>
+
+  <div class="field">
     <label for="hero_image">Hero image</label>
     {% if story.hero_image %}
       <p><img class="flyer flyer--thumb" src="{{ url_for('public.uploads', filename=story.hero_image) }}" alt="Current image"></p>

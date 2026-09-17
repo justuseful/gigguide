@@ -31,6 +31,19 @@
 </article>
 {% endmacro %}
 
+{% macro social_embed(url) %}
+{% if url %}
+<div class="social-embed">
+  {% if 'instagram.com' in url %}
+  <iframe src="{{ url|ig_embed }}" width="500" height="600" loading="lazy" scrolling="no" allowtransparency="true"></iframe>
+  {% else %}
+  <iframe src="https://www.facebook.com/plugins/{{ 'video' if ('/videos/' in url or 'watch' in url or 'fb.watch' in url) else 'post' }}.php?href={{ url|urlencode }}&show_text=false&width=500" width="500" height="{{ '400' if ('/videos/' in url or 'watch' in url or 'fb.watch' in url) else '650' }}" loading="lazy" scrolling="no" allowfullscreen></iframe>
+  {% endif %}
+  <p class="social-embed__link"><a href="{{ url }}" rel="noopener" target="_blank">{{ "Open on Instagram" if 'instagram.com' in url else "Open on Facebook" }} &#8599;</a></p>
+</div>
+{% endif %}
+{% endmacro %}
+
 {% macro comment_form(story, parent_id=None) %}
 <form method="post" action="{{ url_for('public.story_comment', slug=story.slug) }}#comments" class="form comment-form">
   <input type="hidden" name="_csrf" value="{{ csrf_token() }}">

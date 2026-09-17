@@ -5,7 +5,7 @@ from .comments import list_comments, submit_comment
 from .db import get_db
 from .routes_public import bp
 
-STORY_COLUMNS = "id, slug, title, category, excerpt, body, hero_image, youtube_id, published_at"
+STORY_COLUMNS = "id, slug, title, category, excerpt, body, hero_image, youtube_id, social_url, published_at"
 
 
 @bp.get("/stories")

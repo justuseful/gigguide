@@ -1,4 +1,5 @@
 from datetime import date, datetime
+from urllib.parse import urlsplit
 
 import markdown as _markdown
 from markupsafe import Markup, escape
@@ -39,8 +40,15 @@ def render_markdown(value) -> Markup:
     return Markup(html)
 
 
+def ig_embed_url(url: str) -> str:
+    """Strip query params/fragment and point at Instagram's public embed endpoint."""
+    parts = urlsplit(url)
+    return f"{parts.scheme}://{parts.netloc}{parts.path.rstrip('/')}/embed/"
+
+
 def register_filters(app):
     app.add_template_filter(fmt_date, "date")
     app.add_template_filter(fmt_time, "time")
     app.add_template_filter(nl2p, "nl2p")
     app.add_template_filter(render_markdown, "markdown")
+    app.add_template_filter(ig_embed_url, "ig_embed")
