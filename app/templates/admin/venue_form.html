@@ -34,6 +34,11 @@
     <small>Lets "Import Facebook events" pull this venue's events automatically. Find it under the Page's About &rarr; Page transparency, or use the page's username from its URL.</small>
   </div>
   <div class="field">
+    <label for="facebook_page_token">Facebook Page Access Token (optional)</label>
+    <input type="text" id="facebook_page_token" name="facebook_page_token" placeholder="Only needed for pages you personally administer" value="{{ venue.facebook_page_token or '' }}">
+    <small>Only set this for a Page you admin yourself &ndash; it lets the import work today, before Meta approves broader access. Generate one via Meta's Graph API Explorer. Leave blank for other venues; once Page Public Content Access is approved, those work automatically without a token here.</small>
+  </div>
+  <div class="field">
     <label for="description">Description</label>
     <textarea id="description" name="description">{{ venue.description or '' }}</textarea>
   </div>

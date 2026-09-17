@@ -8,18 +8,6 @@ from .db import get_db
 GRAPH_API = "https://graph.facebook.com/v21.0"
 
 
-class FacebookConfigError(Exception):
-    pass
-
-
-def _app_access_token(app_id: str, app_secret: str) -> str:
-    if not app_id or not app_secret:
-        raise FacebookConfigError(
-            "Set FACEBOOK_APP_ID and FACEBOOK_APP_SECRET (e.g. in /etc/gigguide.env) first."
-        )
-    return f"{app_id}|{app_secret}"
-
-
 def _parse_fb_datetime(value: str) -> datetime:
     # Facebook sends e.g. "2026-10-05T19:00:00+1100" - Python's fromisoformat
     # wants a colon in the offset on older versions, so normalise it first.
@@ -49,19 +37,31 @@ def fetch_page_events(page_id: str, access_token: str) -> list[dict]:
 def import_facebook_events(app_id: str, app_secret: str) -> dict[str, dict]:
     """For every venue with a facebook_page_id set, pull its upcoming public
     events and add any not already present. Returns a per-venue report so
-    failures are visible rather than silently skipped - the most common one
-    being a Page you don't administer, which needs Meta's "Page Public
-    Content Access" review before it'll return anything."""
-    access_token = _app_access_token(app_id, app_secret)
+    failures are visible rather than silently skipped.
+
+    Each venue can carry its own facebook_page_token (a Page Access Token) -
+    that's what lets a Page *you* admin work today, before Meta approves
+    anything. Venues without one fall back to the app access token
+    (app_id|app_secret), which only works for Pages your app has been
+    granted "Page Public Content Access" for."""
+    app_access_token = f"{app_id}|{app_secret}" if app_id and app_secret else None
     db = get_db()
     venues = db.execute(
-        "SELECT id, name, facebook_page_id FROM venues WHERE facebook_page_id IS NOT NULL AND facebook_page_id != ''"
+        "SELECT id, name, facebook_page_id, facebook_page_token FROM venues "
+        "WHERE facebook_page_id IS NOT NULL AND facebook_page_id != ''"
     ).fetchall()
 
     report: dict[str, dict] = {}
     for venue in venues:
+        token = venue["facebook_page_token"] or app_access_token
+        if not token:
+            report[venue["name"]] = {
+                "error": "No Page Access Token set on this venue, and no FACEBOOK_APP_ID/"
+                "FACEBOOK_APP_SECRET configured to fall back to."
+            }
+            continue
         try:
-            events = fetch_page_events(venue["facebook_page_id"], access_token)
+            events = fetch_page_events(venue["facebook_page_id"], token)
         except Exception as exc:  # noqa: BLE001 - report per venue, don't abort the whole run
             report[venue["name"]] = {"error": str(exc)}
             continue

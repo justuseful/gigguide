@@ -58,16 +58,12 @@ def register_cli(app):
     def import_facebook_events_command():
         """Pull upcoming events from each venue's Facebook Page (set via the
         "Facebook Page ID" field on that venue) and add any not already listed.
-        Requires FACEBOOK_APP_ID and FACEBOOK_APP_SECRET to be set. Venues whose
-        Page you don't administer will fail until Meta approves the app for
-        Page Public Content Access - that's expected, not a bug."""
-        from .facebook_events import FacebookConfigError, import_facebook_events
+        Uses that venue's own Page Access Token if set (works today, for pages
+        you admin), otherwise falls back to FACEBOOK_APP_ID/FACEBOOK_APP_SECRET,
+        which only works once Meta approves Page Public Content Access."""
+        from .facebook_events import import_facebook_events
 
-        try:
-            report = import_facebook_events(app.config["FACEBOOK_APP_ID"], app.config["FACEBOOK_APP_SECRET"])
-        except FacebookConfigError as exc:
-            click.echo(str(exc))
-            return
+        report = import_facebook_events(app.config["FACEBOOK_APP_ID"], app.config["FACEBOOK_APP_SECRET"])
         if not report:
             click.echo("No venues have a Facebook Page ID set yet - add one from the venue edit page.")
             return

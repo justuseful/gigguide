@@ -7,7 +7,8 @@ CREATE TABLE IF NOT EXISTS venues (
     website     TEXT,
     instagram   TEXT,
     description TEXT,
-    facebook_page_id TEXT,      -- numeric Page ID or username, for pulling events via the Graph API
+    facebook_page_id    TEXT,   -- numeric Page ID or username, for pulling events via the Graph API
+    facebook_page_token TEXT,   -- optional: a Page Access Token, for pages you admin (works before App Review)
     created_at  TEXT NOT NULL DEFAULT (datetime('now'))
 );
 

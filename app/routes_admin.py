@@ -332,6 +332,7 @@ def _venue_form_data() -> dict:
         "instagram": (f.get("instagram") or "").strip().lstrip("@") or None,
         "description": (f.get("description") or "").strip() or None,
         "facebook_page_id": (f.get("facebook_page_id") or "").strip() or None,
+        "facebook_page_token": (f.get("facebook_page_token") or "").strip() or None,
     }
 
 
@@ -368,9 +369,9 @@ def venue_new():
         slug = unique_slug(db, "venues", slugify(data["name"]))
         db.execute(
             "INSERT INTO venues (slug, name, town, address, website, instagram, description, "
-            "facebook_page_id) VALUES (?,?,?,?,?,?,?,?)",
+            "facebook_page_id, facebook_page_token) VALUES (?,?,?,?,?,?,?,?,?)",
             (slug, data["name"], data["town"], data["address"], data["website"],
-             data["instagram"], data["description"], data["facebook_page_id"]),
+             data["instagram"], data["description"], data["facebook_page_id"], data["facebook_page_token"]),
         )
         db.commit()
         flash("Venue added.", "ok")
@@ -394,9 +395,9 @@ def venue_edit(venue_id):
             return render_template("admin/venue_form.html", venue=data, is_new=False), 400
         db.execute(
             "UPDATE venues SET name=?, town=?, address=?, website=?, instagram=?, description=?, "
-            "facebook_page_id=? WHERE id=?",
+            "facebook_page_id=?, facebook_page_token=? WHERE id=?",
             (data["name"], data["town"], data["address"], data["website"], data["instagram"],
-             data["description"], data["facebook_page_id"], venue_id),
+             data["description"], data["facebook_page_id"], data["facebook_page_token"], venue_id),
         )
         db.commit()
         flash("Venue updated.", "ok")
