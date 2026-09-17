@@ -41,3 +41,15 @@ def register_cli(app):
             f"Added {added} new gig(s), skipped {skipped} already present, "
             f"{unmatched} unmatched venue(s)."
         )
+
+    @app.cli.command("merge-venues")
+    @click.argument("keep_slug")
+    @click.argument("remove_slug")
+    def merge_venues_command(keep_slug, remove_slug):
+        """Move all gigs from REMOVE_SLUG onto KEEP_SLUG, then delete REMOVE_SLUG.
+        For duplicate venues (e.g. a manually-added one and a differently-named
+        one picked up by the Echo scrape)."""
+        from .merge_venues import merge_venues
+
+        moved, keep_name, remove_name = merge_venues(keep_slug, remove_slug)
+        click.echo(f"Moved {moved} gig(s) from '{remove_name}' into '{keep_name}'. '{remove_name}' deleted.")
