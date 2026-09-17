@@ -83,8 +83,27 @@
     <label class="check"><input type="checkbox" name="featured" value="1" {% if gig.featured %}checked{% endif %}> Featured (paid placement &ndash; shown at the top of the guide)</label>
   </div>
 
+  {% if gig.series_id %}
+  <div class="field">
+    <label>Repeats</label>
+    <p>&#128257; Weekly, every {{ series_weekday }}, until you stop it. Editing this occurrence only changes this date &ndash; future ones keep using whatever was most recently saved.</p>
+  </div>
+  {% else %}
+  <div class="field">
+    <label class="check"><input type="checkbox" name="repeat_weekly" value="1"> Repeats every week on this day, until I turn it off</label>
+    <small>Good for classes and jam nights. New dates get added automatically about {{ 10 }} weeks ahead; stop it any time from the edit page once it exists.</small>
+  </div>
+  {% endif %}
+
   <button class="btn" type="submit">{{ "Add gig" if is_new else "Save changes" }}</button>
 </form>
+
+{% if gig.series_id %}
+<form method="post" action="{{ url_for('admin.gig_stop_recurring', gig_id=gig.id) }}" class="form form--danger" onsubmit="return confirm('Stop this weekly series? Future occurrences that haven\'t happened yet will be removed. Past and today\'s stay.');">
+  <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+  <button class="btn btn--danger" type="submit">Stop repeating</button>
+</form>
+{% endif %}
 
 {% if not is_new %}
 <form method="post" action="{{ url_for('admin.gig_delete', gig_id=gig.id) }}" class="form form--danger" onsubmit="return confirm('Delete this gig? This cannot be undone.');">

@@ -7,6 +7,7 @@ from flask import Blueprint, current_app, flash, redirect, render_template, requ
 
 from .auth import admin_required, check_csrf
 from .db import get_db
+from .recurrence import ensure_recurring_occurrences, start_series, stop_series
 from .util import slugify, today_local, unique_slug
 
 bp = Blueprint("admin", __name__)
@@ -85,6 +86,7 @@ def _gig_form_data() -> dict:
         "description": (f.get("description") or "").strip() or None,
         "featured": 1 if f.get("featured") else 0,
         "performer_ids": f.getlist("performer_ids", type=int),
+        "repeat_weekly": bool(f.get("repeat_weekly")),
     }
 
 
@@ -134,11 +136,12 @@ def _set_gig_performers(db, gig_id: int, performer_ids: list[int]):
 @bp.get("/")
 def dashboard():
     db = get_db()
+    ensure_recurring_occurrences(db)
     today = today_local().isoformat()
     week_start = (today_local() - timedelta(days=6)).isoformat()
     base = (
-        "SELECT g.id, g.title, g.gig_date, g.start_time, g.featured, g.youtube_id, v.name AS venue_name "
-        "FROM gigs g JOIN venues v ON v.id = g.venue_id "
+        "SELECT g.id, g.title, g.gig_date, g.start_time, g.featured, g.youtube_id, g.series_id, "
+        "v.name AS venue_name FROM gigs g JOIN venues v ON v.id = g.venue_id "
     )
     upcoming = db.execute(base + "WHERE g.gig_date >= ? ORDER BY g.gig_date, g.start_time", (today,)).fetchall()
     past = db.execute(base + "WHERE g.gig_date < ? ORDER BY g.gig_date DESC LIMIT 20", (today,)).fetchall()
@@ -194,8 +197,13 @@ def gig_new():
                 data["ticket_url"], data["youtube_id"], flyer, data["description"], data["featured"],
             ),
         )
-        _set_gig_performers(db, cur.lastrowid, data["performer_ids"])
+        new_id = cur.lastrowid
+        _set_gig_performers(db, new_id, data["performer_ids"])
+        if data["repeat_weekly"]:
+            start_series(db, new_id)
         db.commit()
+        if data["repeat_weekly"]:
+            ensure_recurring_occurrences(db)
         flash("Gig added.", "ok")
         return redirect(url_for("admin.dashboard"))
     preset = {"venue_id": request.args.get("venue", type=int)}
@@ -231,9 +239,11 @@ def gig_edit(gig_id):
                 flash(message, "error")
             data["id"] = gig_id
             data["flyer"] = gig["flyer"]
+            data["series_id"] = gig["series_id"]
+            series_weekday = date.fromisoformat(gig["gig_date"]).strftime("%A") if gig["series_id"] else None
             return render_template(
                 "admin/gig_form.html", gig=data, venues=venues, performers=performers,
-                selected_performer_ids=set(data["performer_ids"]), is_new=False,
+                selected_performer_ids=set(data["performer_ids"]), is_new=False, series_weekday=series_weekday,
             ), 400
         flyer = gig["flyer"]
         if new_flyer or request.form.get("remove_flyer"):
@@ -248,13 +258,32 @@ def gig_edit(gig_id):
             ),
         )
         _set_gig_performers(db, gig_id, data["performer_ids"])
+        if data["repeat_weekly"] and gig["series_id"] is None:
+            start_series(db, gig_id)
         db.commit()
+        if data["repeat_weekly"] and gig["series_id"] is None:
+            ensure_recurring_occurrences(db)
         flash("Gig updated.", "ok")
         return redirect(url_for("admin.dashboard"))
+    series_weekday = None
+    if gig["series_id"] is not None:
+        series_weekday = date.fromisoformat(gig["gig_date"]).strftime("%A")
     return render_template(
         "admin/gig_form.html", gig=gig, venues=venues, performers=performers,
-        selected_performer_ids=current_performer_ids, is_new=False,
+        selected_performer_ids=current_performer_ids, is_new=False, series_weekday=series_weekday,
     )
+
+
+@bp.post("/gigs/<int:gig_id>/stop-recurring")
+def gig_stop_recurring(gig_id):
+    db = get_db()
+    gig = db.execute("SELECT series_id FROM gigs WHERE id = ?", (gig_id,)).fetchone()
+    if gig is None or gig["series_id"] is None:
+        flash("This gig isn't part of a weekly series.", "error")
+        return redirect(url_for("admin.dashboard"))
+    removed = stop_series(db, gig["series_id"])
+    flash(f"Stopped the weekly series ({removed} upcoming occurrence(s) removed).", "ok")
+    return redirect(url_for("admin.dashboard"))
 
 
 @bp.post("/gigs/<int:gig_id>/delete")

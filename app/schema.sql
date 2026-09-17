@@ -23,12 +23,16 @@ CREATE TABLE IF NOT EXISTS gigs (
     description TEXT,
     featured    INTEGER NOT NULL DEFAULT 0,
     source      TEXT NOT NULL DEFAULT 'manual',
+    recurrence        TEXT,                          -- NULL, or 'weekly'
+    recurrence_active INTEGER NOT NULL DEFAULT 1,     -- set to 0 to stop generating future occurrences
+    series_id         INTEGER,                        -- id of the first gig in this weekly series (self on that row)
     created_at  TEXT NOT NULL DEFAULT (datetime('now')),
     updated_at  TEXT NOT NULL DEFAULT (datetime('now'))
 );
 
-CREATE INDEX IF NOT EXISTS idx_gigs_date  ON gigs(gig_date);
-CREATE INDEX IF NOT EXISTS idx_gigs_venue ON gigs(venue_id);
+CREATE INDEX IF NOT EXISTS idx_gigs_date   ON gigs(gig_date);
+CREATE INDEX IF NOT EXISTS idx_gigs_venue  ON gigs(venue_id);
+CREATE INDEX IF NOT EXISTS idx_gigs_series ON gigs(series_id);
 
 CREATE TABLE IF NOT EXISTS performers (
     id          INTEGER PRIMARY KEY,

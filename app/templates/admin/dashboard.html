@@ -26,7 +26,7 @@
   {% for g in upcoming %}
     <tr>
       <td>{{ g.gig_date|date }}{% if g.start_time %} {{ g.start_time|time }}{% endif %}</td>
-      <td>{{ g.title }}{% if g.featured %} <span class="badge badge--featured">Featured</span>{% endif %}{% if g.youtube_id %} <span class="badge badge--video">Video</span>{% endif %}</td>
+      <td>{{ g.title }}{% if g.featured %} <span class="badge badge--featured">Featured</span>{% endif %}{% if g.youtube_id %} <span class="badge badge--video">Video</span>{% endif %}{% if g.series_id %} <span class="badge">&#128257; Weekly</span>{% endif %}</td>
       <td>{{ g.venue_name }}</td>
       <td><a href="{{ url_for('admin.gig_edit', gig_id=g.id) }}">Edit</a></td>
     </tr>
