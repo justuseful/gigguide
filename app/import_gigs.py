@@ -1,6 +1,7 @@
 import json
 
 from .db import get_db
+from .link_performers import link_gig_performers
 
 
 def import_gigs(json_file: str) -> tuple[int, int, int]:
@@ -9,7 +10,8 @@ def import_gigs(json_file: str) -> tuple[int, int, int]:
     objects. Idempotent: gigs already present (matched by venue + date + time + title,
     case-insensitive) are skipped, so this is safe to re-run against a fresher export
     from the same source. Gigs whose venue isn't found in the venues table are skipped
-    and reported separately so they can be added manually."""
+    and reported separately so they can be added manually. Each newly-added gig also
+    gets its performer(s) extracted from the title and linked (see link_performers.py)."""
     with open(json_file, encoding="utf-8") as f:
         data = json.load(f)
 
@@ -39,11 +41,12 @@ def import_gigs(json_file: str) -> tuple[int, int, int]:
             skipped += 1
             continue
 
-        db.execute(
+        cur = db.execute(
             "INSERT INTO gigs (venue_id, title, gig_date, start_time, source) "
             "VALUES (?, ?, ?, ?, 'echo')",
             (venue_id, title, gig_date, start_time),
         )
+        link_gig_performers(db, cur.lastrowid, title)
         existing.add(key)
         added += 1
 

@@ -54,6 +54,22 @@ def register_cli(app):
         moved, keep_name, remove_name = merge_venues(keep_slug, remove_slug)
         click.echo(f"Moved {moved} gig(s) from '{remove_name}' into '{keep_name}'. '{remove_name}' deleted.")
 
+    @app.cli.command("link-performers")
+    def link_performers_command():
+        """Backfill performer links for every existing gig by splitting its
+        title on "+"/",". Safe to re-run - only adds links that don't already
+        exist. New gigs from `import-gigs` are linked automatically as they're
+        added; this is for gigs imported before that was in place."""
+        from .db import get_db
+        from .link_performers import link_performers_from_titles
+
+        result = link_performers_from_titles(get_db())
+        click.echo(
+            f"Processed {result['gigs_processed']} gig(s), {result['gigs_with_performers']} had "
+            f"performer(s) to link. Created {result['performers_created']} new performer(s), "
+            f"added {result['links_added']} gig-performer link(s)."
+        )
+
     @app.cli.command("import-facebook-events")
     def import_facebook_events_command():
         """Pull upcoming events from each venue's Facebook Page (set via the
