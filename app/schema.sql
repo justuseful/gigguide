@@ -46,6 +46,7 @@ CREATE TABLE IF NOT EXISTS performers (
     website     TEXT,
     youtube_id  TEXT,          -- a default/featured video for their profile page
     social_url  TEXT,          -- Instagram or Facebook post/video link
+    related_performers TEXT,   -- comma-separated slugs of other performers mentioned on this profile
     created_at  TEXT NOT NULL DEFAULT (datetime('now'))
 );
 

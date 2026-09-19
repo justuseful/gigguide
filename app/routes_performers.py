@@ -35,4 +35,12 @@ def performer(slug):
         "WHERE gp.performer_id = ? AND g.gig_date < ? ORDER BY g.gig_date DESC LIMIT 12",
         (row["id"], today),
     ).fetchall()
-    return render_template("performer.html", performer=row, upcoming=upcoming, past=past)
+    related_slugs = [s.strip() for s in (row["related_performers"] or "").split(",") if s.strip()]
+    related = []
+    if related_slugs:
+        placeholders = ",".join("?" * len(related_slugs))
+        related = db.execute(
+            f"SELECT name, slug FROM performers WHERE slug IN ({placeholders}) ORDER BY name",
+            related_slugs,
+        ).fetchall()
+    return render_template("performer.html", performer=row, upcoming=upcoming, past=past, related=related)

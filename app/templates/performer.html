@@ -18,6 +18,10 @@
 
 {% if performer.bio %}<div>{{ performer.bio|nl2p }}</div>{% endif %}
 
+{% if related %}
+<p>Also featuring: {% for r in related %}{% if not loop.first %}, {% endif %}<a href="{{ url_for('public.performer', slug=r.slug) }}">{{ r.name }}</a>{% endfor %}</p>
+{% endif %}
+
 {% set links = [] %}
 {% if performer.website %}{% set _ = links.append(("Website", performer.website)) %}{% endif %}
 {% if performer.instagram %}{% set _ = links.append(("Instagram", "https://instagram.com/" ~ performer.instagram)) %}{% endif %}

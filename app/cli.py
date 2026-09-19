@@ -66,6 +66,39 @@ def register_cli(app):
         moved, keep_name, remove_name = merge_performers(keep_slug, remove_slug)
         click.echo(f"Moved {moved} gig link(s) from '{remove_name}' into '{keep_name}'. '{remove_name}' deleted.")
 
+    @app.cli.command("ensure-performer")
+    @click.argument("name")
+    def ensure_performer_command(name):
+        """Find a performer by name (case-insensitive), or create a new profile
+        for them if none exists yet. Prints the slug either way."""
+        from .update_performer import ensure_performer
+
+        slug, created = ensure_performer(name)
+        click.echo(f"{'Created' if created else 'Found'} '{name}' -> slug '{slug}'")
+
+    @app.cli.command("update-performer")
+    @click.argument("slug")
+    @click.option("--bio", help="Replace the profile bio text.")
+    @click.option("--youtube-id", help="YouTube video ID for the featured video.")
+    @click.option("--social-url", help="Instagram or Facebook post/video URL.")
+    @click.option("--related", help="Comma-separated slugs of other performers to show as 'Also featuring'.")
+    def update_performer_command(slug, bio, youtube_id, social_url, related):
+        """Set one or more fields on an existing performer's profile (e.g. for
+        content added from a video/story rather than through the admin form)."""
+        from .update_performer import update_performer
+
+        fields = {}
+        if bio is not None:
+            fields["bio"] = bio
+        if youtube_id is not None:
+            fields["youtube_id"] = youtube_id
+        if social_url is not None:
+            fields["social_url"] = social_url
+        if related is not None:
+            fields["related_performers"] = related
+        name = update_performer(slug, **fields)
+        click.echo(f"Updated '{name}'.")
+
     @app.cli.command("link-performers")
     def link_performers_command():
         """Backfill performer links for every existing gig by splitting its
