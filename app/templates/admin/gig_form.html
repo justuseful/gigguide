@@ -9,14 +9,16 @@
 <form method="post" enctype="multipart/form-data" class="form">
   <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
 
+  {% set selected_venue = venues|selectattr('id', 'equalto', gig.venue_id)|first if gig.venue_id else none %}
   <div class="field">
-    <label for="venue_id">Venue</label>
-    <select id="venue_id" name="venue_id" required>
-      <option value="">Choose a venue&hellip;</option>
-      {% for v in venues %}
-        <option value="{{ v.id }}" {% if gig.venue_id == v.id %}selected{% endif %}>{{ v.name }} &middot; {{ v.town }}</option>
-      {% endfor %}
-    </select>
+    <label for="venue_search">Venue</label>
+    <div class="combobox" data-combobox="single" data-name="venue_id">
+      <input type="text" id="venue_search" class="combobox__input" autocomplete="off" placeholder="Start typing a venue name&hellip;" value="{{ selected_venue.label if selected_venue else '' }}">
+      <ul class="combobox__list" role="listbox" hidden></ul>
+      <div class="combobox__hidden">{% if selected_venue %}<input type="hidden" name="venue_id" value="{{ selected_venue.id }}">{% endif %}</div>
+      <script type="application/json" class="combobox__options">{{ venues|tojson }}</script>
+      <script type="application/json" class="combobox__selected">{{ ([selected_venue] if selected_venue else [])|tojson }}</script>
+    </div>
     <small><a href="{{ url_for('admin.venue_new') }}">Add a new venue</a></small>
   </div>
 
@@ -56,17 +58,17 @@
     <small>Shown embedded on the page, with a plain link to open it on Instagram/Facebook as well.</small>
   </div>
 
+  {% set selected_performers = performers|selectattr('id', 'in', selected_performer_ids)|list %}
   <div class="field">
-    <label>Performers</label>
-    {% if performers %}
-    <div class="check-list">
-      {% for p in performers %}
-        <label class="check"><input type="checkbox" name="performer_ids" value="{{ p.id }}" {% if p.id in selected_performer_ids %}checked{% endif %}> {{ p.name }}</label>
-      {% endfor %}
+    <label for="performer_search">Performers</label>
+    <div class="combobox combobox--multi" data-combobox="multi" data-name="performer_ids">
+      <div class="combobox__chips"></div>
+      <input type="text" id="performer_search" class="combobox__input" autocomplete="off" placeholder="Start typing a performer name&hellip;">
+      <ul class="combobox__list" role="listbox" hidden></ul>
+      <div class="combobox__hidden"></div>
+      <script type="application/json" class="combobox__options">{{ performers|tojson }}</script>
+      <script type="application/json" class="combobox__selected">{{ selected_performers|tojson }}</script>
     </div>
-    {% else %}
-    <p class="muted">No performers yet.</p>
-    {% endif %}
     <small><a href="{{ url_for('admin.performer_new', next=request.full_path) }}">Add a new performer</a></small>
   </div>
 

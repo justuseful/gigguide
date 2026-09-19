@@ -135,11 +135,15 @@ def _validate_gig(data: dict, db) -> list[str]:
 
 
 def _venue_choices(db):
-    return db.execute("SELECT id, name, town FROM venues ORDER BY name").fetchall()
+    """Dicts (not Rows) so they can be dropped straight into the venue
+    combobox's JSON option list with |tojson."""
+    rows = db.execute("SELECT id, name, town FROM venues ORDER BY name").fetchall()
+    return [{"id": r["id"], "name": r["name"], "town": r["town"], "label": f"{r['name']} · {r['town']}"} for r in rows]
 
 
 def _performer_choices(db):
-    return db.execute("SELECT id, name FROM performers ORDER BY name").fetchall()
+    rows = db.execute("SELECT id, name FROM performers ORDER BY name").fetchall()
+    return [{"id": r["id"], "name": r["name"], "label": r["name"]} for r in rows]
 
 
 def _set_gig_performers(db, gig_id: int, performer_ids: list[int]):
