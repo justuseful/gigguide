@@ -2,7 +2,7 @@ import os
 import secrets
 from pathlib import Path
 
-from flask import Flask, render_template
+from flask import Flask, render_template, url_for
 
 from . import db as database
 from .auth import csrf_token
@@ -64,6 +64,19 @@ def create_app(test_config: dict | None = None) -> Flask:
     register_filters(app)
     register_cli(app)
     app.jinja_env.globals["csrf_token"] = csrf_token
+
+    def static_url(filename: str) -> str:
+        # Cloudflare (and browsers) cache /static for a week per nginx's
+        # Cache-Control; a bare url_for() would keep serving a stale file
+        # after every deploy. Appending the file's mtime busts that cache
+        # only when the file has actually changed.
+        try:
+            version = int((Path(app.static_folder) / filename).stat().st_mtime)
+        except OSError:
+            version = 0
+        return url_for("static", filename=filename, v=version)
+
+    app.jinja_env.globals["static_url"] = static_url
 
     app.register_blueprint(public_bp)
     app.register_blueprint(admin_bp, url_prefix="/admin")

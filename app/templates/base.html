@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}{{ config.SITE_NAME }}{% endblock %}</title>
   <meta name="description" content="{% block description %}{{ config.SITE_TAGLINE }}{% endblock %}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="{{ static_url('style.css') }}">
 </head>
 <body>
   <header class="site-header">
@@ -27,6 +27,6 @@
   <footer class="site-footer">
     {{ config.SITE_NAME }} &middot; {{ config.SITE_TAGLINE }}
   </footer>
-  <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+  <script src="{{ static_url('app.js') }}" defer></script>
 </body>
 </html>
