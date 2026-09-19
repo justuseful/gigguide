@@ -77,6 +77,12 @@ document.querySelectorAll("[data-combobox]").forEach((root) => {
   }
 
   function choose(opt) {
+    if (root.dataset.navigate) {
+      input.value = opt.label;
+      closeList();
+      window.location.href = opt.url;
+      return;
+    }
     if (mode === "multi") {
       if (!selected.has(opt.id)) {
         selected.set(opt.id, opt.label);

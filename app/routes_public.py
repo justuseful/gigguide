@@ -1,6 +1,6 @@
 from datetime import timedelta
 
-from flask import Blueprint, abort, current_app, render_template, request, send_from_directory
+from flask import Blueprint, abort, current_app, render_template, request, send_from_directory, url_for
 
 from .db import get_db
 from .util import today_local
@@ -97,12 +97,12 @@ def gig(gig_id):
 @bp.get("/venues")
 def venues():
     db = get_db()
-    rows = db.execute(
-        "SELECT v.*, (SELECT COUNT(*) FROM gigs g WHERE g.venue_id = v.id AND g.gig_date >= ?) AS upcoming "
-        "FROM venues v ORDER BY v.town, v.name",
-        (today_local().isoformat(),),
-    ).fetchall()
-    return render_template("venues.html", venues=rows)
+    rows = db.execute("SELECT slug, name, town FROM venues ORDER BY name").fetchall()
+    options = [
+        {"id": r["slug"], "label": f"{r['name']} · {r['town']}", "url": url_for("public.venue", slug=r["slug"])}
+        for r in rows
+    ]
+    return render_template("venues.html", options=options, count=len(options))
 
 
 @bp.get("/venue/<slug>")

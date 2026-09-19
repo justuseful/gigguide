@@ -1,4 +1,4 @@
-from flask import abort, render_template
+from flask import abort, render_template, url_for
 
 from .db import get_db
 from .routes_public import GIG_COLUMNS, GIG_FROM, bp
@@ -8,14 +8,12 @@ from .util import today_local
 @bp.get("/performers")
 def performers():
     db = get_db()
-    rows = db.execute(
-        "SELECT p.*, "
-        "(SELECT COUNT(*) FROM gig_performers gp JOIN gigs g ON g.id = gp.gig_id "
-        " WHERE gp.performer_id = p.id AND g.gig_date >= ?) AS upcoming "
-        "FROM performers p ORDER BY p.name",
-        (today_local().isoformat(),),
-    ).fetchall()
-    return render_template("performers.html", performers=rows)
+    rows = db.execute("SELECT slug, name FROM performers ORDER BY name").fetchall()
+    options = [
+        {"id": r["slug"], "label": r["name"], "url": url_for("public.performer", slug=r["slug"])}
+        for r in rows
+    ]
+    return render_template("performers.html", options=options, count=len(options))
 
 
 @bp.get("/performer/<slug>")

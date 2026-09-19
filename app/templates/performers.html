@@ -3,18 +3,16 @@
 {% block content %}
 <section class="hero">
   <h1>Performers</h1>
-  <p>The people making the music.</p>
+  <p>Find one of {{ count }} act{{ "s" if count != 1 else "" }} by name.</p>
 </section>
-{% if performers %}
-<ul class="list-plain">
-  {% for p in performers %}
-  <li>
-    <a href="{{ url_for('public.performer', slug=p.slug) }}"><strong>{{ p.name }}</strong></a>
-    <span class="muted">&middot; {{ p.upcoming }} upcoming</span>
-    {% if p.youtube_id %}<span class="badge badge--video">&#9654; Video</span>{% endif %}
-  </li>
-  {% endfor %}
-</ul>
+{% if options %}
+<div class="combobox" data-combobox="single" data-navigate="1">
+  <input type="text" class="combobox__input" autocomplete="off" placeholder="Start typing a performer name&hellip;">
+  <ul class="combobox__list" role="listbox" hidden></ul>
+  <div class="combobox__hidden"></div>
+  <script type="application/json" class="combobox__options">{{ options|tojson }}</script>
+  <script type="application/json" class="combobox__selected">[]</script>
+</div>
 {% else %}
 <p class="empty">No performers yet.</p>
 {% endif %}
