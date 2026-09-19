@@ -1,14 +1,14 @@
 from .db import get_db
 from .link_performers import get_or_create_performer
 
-FIELDS = {"bio", "youtube_id", "social_url", "related_performers"}
+FIELDS = {"bio", "youtube_id", "social_url", "related_performers", "website", "instagram"}
 
 
 def update_performer(slug: str, **fields) -> str:
-    """Set one or more of a performer's bio/youtube_id/social_url/related_performers
-    fields directly (e.g. for one-off content added from a video/story, rather than
-    through the admin form). Pass an empty string for a field to clear it; fields left
-    out of `fields` are untouched."""
+    """Set one or more of a performer's bio/youtube_id/social_url/related_performers/
+    website/instagram fields directly (e.g. for one-off content added from a
+    video/story, rather than through the admin form). Pass an empty string for a
+    field to clear it; fields left out of `fields` are untouched."""
     unknown = set(fields) - FIELDS
     if unknown:
         raise ValueError(f"Unknown field(s): {', '.join(sorted(unknown))}")

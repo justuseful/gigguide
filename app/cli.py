@@ -82,7 +82,9 @@ def register_cli(app):
     @click.option("--youtube-id", help="YouTube video ID for the featured video.")
     @click.option("--social-url", help="Instagram or Facebook post/video URL.")
     @click.option("--related", help="Comma-separated slugs of other performers to show as 'Also featuring'.")
-    def update_performer_command(slug, bio, youtube_id, social_url, related):
+    @click.option("--website", help="Website link (or e.g. a Spotify track/artist link).")
+    @click.option("--instagram", help="Instagram handle (without the @).")
+    def update_performer_command(slug, bio, youtube_id, social_url, related, website, instagram):
         """Set one or more fields on an existing performer's profile (e.g. for
         content added from a video/story rather than through the admin form)."""
         from .update_performer import update_performer
@@ -96,6 +98,10 @@ def register_cli(app):
             fields["social_url"] = social_url
         if related is not None:
             fields["related_performers"] = related
+        if website is not None:
+            fields["website"] = website
+        if instagram is not None:
+            fields["instagram"] = instagram
         name = update_performer(slug, **fields)
         click.echo(f"Updated '{name}'.")
 
