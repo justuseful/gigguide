@@ -18,14 +18,14 @@
     <p><a class="btn" href="{{ gig.ticket_url }}" rel="noopener" target="_blank">Tickets</a></p>
   {% endif %}
 
-  {% if gig.youtube_id %}
-  <div class="yt-facade" data-id="{{ gig.youtube_id }}" data-title="{{ gig.title }}" role="button" tabindex="0" aria-label="Play video: {{ gig.title }}">
-    <img src="https://i.ytimg.com/vi/{{ gig.youtube_id }}/hqdefault.jpg" alt="" loading="lazy">
+  {% if gig.display_youtube_id %}
+  <div class="yt-facade" data-id="{{ gig.display_youtube_id }}" data-title="{{ gig.title }}" role="button" tabindex="0" aria-label="Play video: {{ gig.title }}">
+    <img src="https://i.ytimg.com/vi/{{ gig.display_youtube_id }}/hqdefault.jpg" alt="" loading="lazy">
     <span class="yt-play" aria-hidden="true">&#9654;</span>
   </div>
   {% endif %}
 
-  {{ social_embed(gig.social_url) }}
+  {{ social_embed(gig.display_social_url) }}
 
   {% if gig.flyer %}
     <p><img class="flyer" src="{{ url_for('public.uploads', filename=gig.flyer) }}" alt="Flyer for {{ gig.title }}"></p>

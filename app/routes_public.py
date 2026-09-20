@@ -13,7 +13,15 @@ GIG_COLUMNS = """
     g.id, g.venue_id, g.title, g.gig_date, g.start_time, g.price, g.ticket_url,
     g.youtube_id, g.social_url, g.flyer, g.description, g.featured,
     v.name AS venue_name, v.slug AS venue_slug, v.town AS town,
-    v.address AS venue_address, v.website AS venue_website, v.instagram AS venue_instagram
+    v.address AS venue_address, v.website AS venue_website, v.instagram AS venue_instagram,
+    COALESCE(g.youtube_id, (
+        SELECT p.youtube_id FROM gig_performers gp JOIN performers p ON p.id = gp.performer_id
+        WHERE gp.gig_id = g.id AND p.youtube_id IS NOT NULL LIMIT 1
+    )) AS display_youtube_id,
+    COALESCE(g.social_url, (
+        SELECT p.social_url FROM gig_performers gp JOIN performers p ON p.id = gp.performer_id
+        WHERE gp.gig_id = g.id AND p.social_url IS NOT NULL LIMIT 1
+    )) AS display_social_url
 """
 GIG_FROM = "FROM gigs g JOIN venues v ON v.id = g.venue_id"
 
