@@ -25,8 +25,17 @@
 <div class="venue-box">
   <p>Artist Pro gets your gigs automatically featured at the top of the guide, plus a Pro badge,
      video and booking info front-and-centre on your profile.</p>
+  {% if artist_pro_monthly_url %}
+  <p>
+    <a class="btn" href="{{ artist_pro_monthly_url }}" rel="noopener" target="_blank">Pay ${{ artist_pro_monthly_price }}/month via PayPal</a>
+    <a class="btn btn--ghost" href="{{ artist_pro_annual_url }}" rel="noopener" target="_blank">Pay ${{ artist_pro_annual_price }}/year instead</a>
+  </p>
+  <p class="muted">This is a one-off PayPal payment, not auto-renewing yet &ndash; we'll email you before it's due to renew.
+     Once we see your payment we'll switch Pro on within a day. <a href="{{ artist_pro_mailto }}">Questions? Email us</a> first if you'd rather.</p>
+  {% else %}
   <p><strong>$10/month or $96/year.</strong></p>
   <a class="btn" href="{{ artist_pro_mailto }}">Get in touch</a>
+  {% endif %}
 </div>
 
 <h2 class="section-title">For local businesses: Advertise here</h2>
