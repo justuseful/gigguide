@@ -14,6 +14,8 @@ def _performer_form_data() -> dict:
         "website": (f.get("website") or "").strip() or None,
         "youtube": (f.get("youtube") or "").strip(),
         "social": (f.get("social") or "").strip(),
+        "based_in": (f.get("based_in") or "").strip() or None,
+        "booking": (f.get("booking") or "").strip() or None,
     }
 
 
@@ -56,10 +58,10 @@ def performer_new():
             return render_template("admin/performer_form.html", performer=data, is_new=True), 400
         slug = unique_slug(db, "performers", slugify(data["name"]))
         db.execute(
-            "INSERT INTO performers (slug, name, bio, instagram, website, youtube_id, social_url) "
-            "VALUES (?,?,?,?,?,?,?)",
+            "INSERT INTO performers (slug, name, bio, instagram, website, youtube_id, social_url, "
+            "based_in, booking) VALUES (?,?,?,?,?,?,?,?,?)",
             (slug, data["name"], data["bio"], data["instagram"], data["website"], data["youtube_id"],
-             data["social_url"]),
+             data["social_url"], data["based_in"], data["booking"]),
         )
         db.commit()
         flash("Performer added.", "ok")
@@ -82,9 +84,10 @@ def performer_edit(performer_id):
             data["id"] = performer_id
             return render_template("admin/performer_form.html", performer=data, is_new=False), 400
         db.execute(
-            "UPDATE performers SET name=?, bio=?, instagram=?, website=?, youtube_id=?, social_url=? WHERE id=?",
+            "UPDATE performers SET name=?, bio=?, instagram=?, website=?, youtube_id=?, social_url=?, "
+            "based_in=?, booking=? WHERE id=?",
             (data["name"], data["bio"], data["instagram"], data["website"], data["youtube_id"],
-             data["social_url"], performer_id),
+             data["social_url"], data["based_in"], data["booking"], performer_id),
         )
         db.commit()
         flash("Performer updated.", "ok")

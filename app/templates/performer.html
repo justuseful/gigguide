@@ -5,6 +5,7 @@
 {% block content %}
 <section class="hero">
   <h1>{{ performer.name }}</h1>
+  {% if performer.based_in %}<p class="muted">Based in {{ performer.based_in }}</p>{% endif %}
 </section>
 
 {% if performer.youtube_id %}
@@ -28,6 +29,8 @@
 {% if links %}
 <p>{% for label, href in links %}{% if not loop.first %} &middot; {% endif %}<a href="{{ href }}" rel="noopener" target="_blank">{{ label }}</a>{% endfor %}</p>
 {% endif %}
+
+{% if performer.booking %}<p class="muted">Booking: {{ performer.booking }}</p>{% endif %}
 
 <h2 class="section-title">Upcoming gigs</h2>
 {% if upcoming %}

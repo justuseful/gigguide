@@ -47,6 +47,8 @@ CREATE TABLE IF NOT EXISTS performers (
     youtube_id  TEXT,          -- a default/featured video for their profile page
     social_url  TEXT,          -- Instagram or Facebook post/video link
     related_performers TEXT,   -- comma-separated slugs of other performers mentioned on this profile
+    based_in    TEXT,          -- town/region they're based in, e.g. "Byron Bay"
+    booking     TEXT,          -- free text: email, phone, manager, "book via Instagram DM", etc.
     created_at  TEXT NOT NULL DEFAULT (datetime('now'))
 );
 

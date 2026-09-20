@@ -84,7 +84,9 @@ def register_cli(app):
     @click.option("--related", help="Comma-separated slugs of other performers to show as 'Also featuring'.")
     @click.option("--website", help="Website link (or e.g. a Spotify track/artist link).")
     @click.option("--instagram", help="Instagram handle (without the @).")
-    def update_performer_command(slug, bio, youtube_id, social_url, related, website, instagram):
+    @click.option("--based-in", help="Town/region they're based in, e.g. 'Byron Bay'.")
+    @click.option("--booking", help="Booking contact: email, phone, manager, 'via Instagram DM', etc.")
+    def update_performer_command(slug, bio, youtube_id, social_url, related, website, instagram, based_in, booking):
         """Set one or more fields on an existing performer's profile (e.g. for
         content added from a video/story rather than through the admin form)."""
         from .update_performer import update_performer
@@ -102,6 +104,10 @@ def register_cli(app):
             fields["website"] = website
         if instagram is not None:
             fields["instagram"] = instagram
+        if based_in is not None:
+            fields["based_in"] = based_in
+        if booking is not None:
+            fields["booking"] = booking
         name = update_performer(slug, **fields)
         click.echo(f"Updated '{name}'.")
 
