@@ -2,7 +2,7 @@ import os
 import secrets
 from pathlib import Path
 
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template, request, url_for
 
 from . import db as database
 from .auth import csrf_token
@@ -77,6 +77,16 @@ def create_app(test_config: dict | None = None) -> Flask:
         return url_for("static", filename=filename, v=version)
 
     app.jinja_env.globals["static_url"] = static_url
+
+    @app.context_processor
+    def inject_sponsors():
+        # Shown as a modest footer line on public pages - fetched here rather
+        # than threaded through every route's render_template call.
+        if request.blueprint != "public":
+            return {}
+        db = database.get_db()
+        rows = db.execute("SELECT name, url FROM sponsors WHERE active = 1 ORDER BY name").fetchall()
+        return {"active_sponsors": rows}
 
     app.register_blueprint(public_bp)
     app.register_blueprint(admin_bp, url_prefix="/admin")

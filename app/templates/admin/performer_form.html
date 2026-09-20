@@ -41,6 +41,15 @@
     <label for="social">Instagram or Facebook video/post link</label>
     <input type="text" id="social" name="social" placeholder="https://instagram.com/reel/... or https://facebook.com/.../videos/..." value="{{ performer.social or performer.social_url or '' }}">
   </div>
+  <div class="field">
+    <label class="check"><input type="checkbox" id="is_pro" name="is_pro" value="1" {% if performer.is_pro %}checked{% endif %}> Artist Pro subscriber</label>
+    <small>Auto-features this performer's gigs and shows a Pro badge on their profile.</small>
+  </div>
+  <div class="field">
+    <label for="pro_until">Pro until</label>
+    <input type="date" id="pro_until" name="pro_until" value="{{ performer.pro_until or '' }}">
+    <small>Optional &ndash; leave blank if you're tracking renewal manually.</small>
+  </div>
   <button class="btn" type="submit">{{ "Add performer" if is_new else "Save changes" }}</button>
 </form>
 

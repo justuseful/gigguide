@@ -1,6 +1,14 @@
+from urllib.parse import quote
+
 from flask import current_app, render_template
 
 from .routes_public import bp
+
+CONTACT_EMAIL = "humansofbundjalung@gmail.com"
+
+
+def _mailto(subject: str) -> str:
+    return f"mailto:{CONTACT_EMAIL}?subject={quote(subject)}"
 
 
 @bp.get("/support")
@@ -23,4 +31,9 @@ def support():
         },
     ]
     options = [o for o in options if o["url"]]
-    return render_template("support.html", options=options)
+    return render_template(
+        "support.html",
+        options=options,
+        artist_pro_mailto=_mailto("Artist Pro enquiry"),
+        advertise_mailto=_mailto("Advertising enquiry"),
+    )

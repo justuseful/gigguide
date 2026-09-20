@@ -41,4 +41,7 @@ def performer(slug):
             f"SELECT name, slug FROM performers WHERE slug IN ({placeholders}) ORDER BY name",
             related_slugs,
         ).fetchall()
-    return render_template("performer.html", performer=row, upcoming=upcoming, past=past, related=related)
+    is_pro_active = bool(row["is_pro"]) and (not row["pro_until"] or row["pro_until"] >= today)
+    return render_template(
+        "performer.html", performer=row, upcoming=upcoming, past=past, related=related, is_pro_active=is_pro_active
+    )

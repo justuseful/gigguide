@@ -49,6 +49,17 @@ CREATE TABLE IF NOT EXISTS performers (
     related_performers TEXT,   -- comma-separated slugs of other performers mentioned on this profile
     based_in    TEXT,          -- town/region they're based in, e.g. "Byron Bay"
     booking     TEXT,          -- free text: email, phone, manager, "book via Instagram DM", etc.
+    is_pro      INTEGER NOT NULL DEFAULT 0,  -- paid "Artist Pro" subscriber
+    pro_until   TEXT,          -- ISO date the subscription covers through, NULL = no expiry set
+    created_at  TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+CREATE TABLE IF NOT EXISTS sponsors (
+    id          INTEGER PRIMARY KEY,
+    name        TEXT NOT NULL,
+    url         TEXT NOT NULL,
+    blurb       TEXT,
+    active      INTEGER NOT NULL DEFAULT 1,
     created_at  TEXT NOT NULL DEFAULT (datetime('now'))
 );
 

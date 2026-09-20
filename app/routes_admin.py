@@ -7,6 +7,7 @@ from flask import Blueprint, current_app, flash, redirect, render_template, requ
 
 from .auth import admin_required, check_csrf
 from .db import get_db
+from .link_performers import apply_pro_featuring
 from .recurrence import ensure_recurring_occurrences, start_series, stop_series
 from .util import slugify, today_local, unique_slug
 
@@ -153,6 +154,7 @@ def _set_gig_performers(db, gig_id: int, performer_ids: list[int]):
             "INSERT OR IGNORE INTO gig_performers (gig_id, performer_id) VALUES (?, ?)",
             [(gig_id, pid) for pid in set(performer_ids)],
         )
+    apply_pro_featuring(db, gig_id)
 
 
 # ---------- dashboard ----------
@@ -409,6 +411,7 @@ def venue_edit(venue_id):
     return render_template("admin/venue_form.html", venue=venue, is_new=False)
 
 
-# Registers additional routes (stories, comment moderation, performers) onto this same blueprint.
+# Registers additional routes (stories, comment moderation, performers, sponsors) onto this same blueprint.
 from . import routes_admin_stories  # noqa: E402,F401
 from . import routes_admin_performers  # noqa: E402,F401
+from . import routes_admin_sponsors  # noqa: E402,F401

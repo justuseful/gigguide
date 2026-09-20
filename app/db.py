@@ -30,6 +30,8 @@ MIGRATIONS = [
     ("performers", "related_performers", "TEXT"),
     ("performers", "based_in", "TEXT"),
     ("performers", "booking", "TEXT"),
+    ("performers", "is_pro", "INTEGER NOT NULL DEFAULT 0"),
+    ("performers", "pro_until", "TEXT"),
     ("stories", "social_url", "TEXT"),
     ("venues", "facebook_page_id", "TEXT"),
     ("venues", "facebook_page_token", "TEXT"),

@@ -4,7 +4,7 @@
 {% block description %}{{ performer.name }} &ndash; upcoming gigs across Byron Bay and the Northern Rivers.{% endblock %}
 {% block content %}
 <section class="hero">
-  <h1>{{ performer.name }}</h1>
+  <h1>{{ performer.name }}{% if is_pro_active %} <span class="badge badge--pro">Pro</span>{% endif %}</h1>
   {% if performer.based_in %}<p class="muted">Based in {{ performer.based_in }}</p>{% endif %}
 </section>
 

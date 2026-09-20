@@ -26,6 +26,9 @@
   </main>
   <footer class="site-footer">
     {{ config.SITE_NAME }} &middot; {{ config.SITE_TAGLINE }}
+    {% if active_sponsors %}
+    <p class="site-footer__sponsors">Supported by {% for s in active_sponsors %}{% if not loop.first %}, {% endif %}<a href="{{ s.url }}" rel="noopener sponsored" target="_blank">{{ s.name }}</a>{% endfor %}</p>
+    {% endif %}
   </footer>
   <script src="{{ static_url('app.js') }}" defer></script>
 </body>

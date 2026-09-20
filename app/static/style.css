@@ -81,6 +81,7 @@ img { max-width: 100%; }
 }
 .badge--featured { background: var(--accent); color: #fff; }
 .badge--video { background: #222; color: #fff; }
+.badge--pro { background: #1e1b18; color: #f5c542; vertical-align: middle; }
 
 .gig-detail h1 { margin: 0.3rem 0 0.2rem; font-size: 1.9rem; line-height: 1.15; }
 .gig-detail__meta { color: var(--muted); font-size: 1.05rem; margin: 0.2rem 0 1rem; }
@@ -230,6 +231,7 @@ th, td { text-align: left; padding: 0.5rem 0.6rem; border-bottom: 1px solid var(
 .admin-bar__title { margin: 0 0.5rem 0 0; }
 
 .site-footer { text-align: center; color: var(--muted); font-size: 0.85rem; padding: 2rem 1rem; }
+.site-footer__sponsors { margin: 0.4rem 0 0; }
 
 /* Stories */
 .story-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }

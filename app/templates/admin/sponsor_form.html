@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}{{ "Add sponsor" if is_new else "Edit sponsor" }} &ndash; Admin{% endblock %}
+{% block content %}
+<div class="admin-bar">
+  <h1 class="admin-bar__title">{{ "Add sponsor" if is_new else "Edit sponsor" }}</h1>
+  <a class="btn btn--ghost" href="{{ url_for('admin.sponsors') }}">Back to sponsors</a>
+</div>
+
+<form method="post" class="form">
+  <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+  <div class="field">
+    <label for="name">Business / sponsor name</label>
+    <input type="text" id="name" name="name" required maxlength="120" value="{{ sponsor.name or '' }}">
+  </div>
+  <div class="field">
+    <label for="url">Link</label>
+    <input type="url" id="url" name="url" required placeholder="https://" value="{{ sponsor.url or '' }}">
+  </div>
+  <div class="field">
+    <label for="blurb">Blurb</label>
+    <input type="text" id="blurb" name="blurb" placeholder="One short line about them" value="{{ sponsor.blurb or '' }}">
+  </div>
+  <div class="field">
+    <label class="check"><input type="checkbox" id="active" name="active" value="1" {% if sponsor.active %}checked{% endif %}> Active (shown on the site)</label>
+  </div>
+  <button class="btn" type="submit">{{ "Add sponsor" if is_new else "Save changes" }}</button>
+</form>
+
+{% if not is_new %}
+<form method="post" action="{{ url_for('admin.sponsor_delete', sponsor_id=sponsor.id) }}" class="form form--danger" onsubmit="return confirm('Delete this sponsor?');">
+  <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+  <button class="btn btn--danger" type="submit">Delete sponsor</button>
+</form>
+{% endif %}
+{% endblock %}

@@ -86,7 +86,11 @@ def register_cli(app):
     @click.option("--instagram", help="Instagram handle (without the @).")
     @click.option("--based-in", help="Town/region they're based in, e.g. 'Byron Bay'.")
     @click.option("--booking", help="Booking contact: email, phone, manager, 'via Instagram DM', etc.")
-    def update_performer_command(slug, bio, youtube_id, social_url, related, website, instagram, based_in, booking):
+    @click.option("--pro/--no-pro", "is_pro", default=None, help="Mark as an Artist Pro subscriber (or unmark).")
+    @click.option("--pro-until", help="ISO date (YYYY-MM-DD) the Pro subscription runs through.")
+    def update_performer_command(
+        slug, bio, youtube_id, social_url, related, website, instagram, based_in, booking, is_pro, pro_until
+    ):
         """Set one or more fields on an existing performer's profile (e.g. for
         content added from a video/story rather than through the admin form)."""
         from .update_performer import update_performer
@@ -108,6 +112,10 @@ def register_cli(app):
             fields["based_in"] = based_in
         if booking is not None:
             fields["booking"] = booking
+        if is_pro is not None:
+            fields["is_pro"] = is_pro
+        if pro_until is not None:
+            fields["pro_until"] = pro_until
         name = update_performer(slug, **fields)
         click.echo(f"Updated '{name}'.")
 

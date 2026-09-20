@@ -1,6 +1,6 @@
 import re
 
-from .util import slugify, unique_slug
+from .util import slugify, today_local, unique_slug
 
 # Echo gig titles often list several acts on one bill, e.g. "A + B + C" or
 # "A, B, C & D". Splitting on "+"/"," catches the common cases; "&" is left
@@ -53,7 +53,34 @@ def link_gig_performers(db, gig_id: int, title: str) -> int:
             (gig_id, performer_id),
         )
         added += cur.rowcount
+    apply_pro_featuring(db, gig_id)
     return added
+
+
+def refresh_pro_featuring_for_performer(db, performer_id: int) -> None:
+    """Re-apply Pro auto-featuring to every gig this performer is already linked
+    to - covers becoming Pro after gigs were already added, not just gigs
+    linked from this point on."""
+    gig_ids = [
+        r["gig_id"] for r in
+        db.execute("SELECT gig_id FROM gig_performers WHERE performer_id = ?", (performer_id,)).fetchall()
+    ]
+    for gig_id in gig_ids:
+        apply_pro_featuring(db, gig_id)
+
+
+def apply_pro_featuring(db, gig_id: int) -> None:
+    """Auto-feature a gig if any linked performer is an active Artist Pro
+    subscriber - that's the paid perk of the subscription. Never un-features a
+    gig that was featured for some other reason (e.g. a venue paid directly)."""
+    today = today_local().isoformat()
+    has_active_pro = db.execute(
+        "SELECT 1 FROM gig_performers gp JOIN performers p ON p.id = gp.performer_id "
+        "WHERE gp.gig_id = ? AND p.is_pro = 1 AND (p.pro_until IS NULL OR p.pro_until >= ?)",
+        (gig_id, today),
+    ).fetchone()
+    if has_active_pro:
+        db.execute("UPDATE gigs SET featured = 1 WHERE id = ?", (gig_id,))
 
 
 def link_performers_from_titles(db) -> dict:
