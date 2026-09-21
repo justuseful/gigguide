@@ -119,6 +119,25 @@ def register_cli(app):
         name = update_performer(slug, **fields)
         click.echo(f"Updated '{name}'.")
 
+    @app.cli.command("create-story")
+    @click.argument("title")
+    @click.option("--body", required=True, help="Story body (Markdown, paragraphs separated by blank lines).")
+    @click.option("--category", default="Story", help="Human of Bundjalung, Interview, News, or Story.")
+    @click.option("--excerpt", help="Short teaser shown on the stories list page.")
+    @click.option("--youtube-id", help="YouTube video ID for the featured video.")
+    @click.option("--social-url", help="Instagram or Facebook post/video URL.")
+    @click.option("--publish/--draft", default=True, help="Publish immediately, or save as a draft.")
+    def create_story_command(title, body, category, excerpt, youtube_id, social_url, publish):
+        """Create a new story - a longer first-person writeup with video, for
+        the Stories section (as opposed to just a performer-page embed)."""
+        from .create_story import create_story
+
+        slug = create_story(
+            title, body, category=category, excerpt=excerpt,
+            youtube_id=youtube_id, social_url=social_url, published=publish,
+        )
+        click.echo(f"Created '{title}' -> slug '{slug}'" + (" (published)" if publish else " (draft)"))
+
     @app.cli.command("link-performers")
     def link_performers_command():
         """Backfill performer links for every existing gig by splitting its
