@@ -138,6 +138,38 @@ def register_cli(app):
         )
         click.echo(f"Created '{title}' -> slug '{slug}'" + (" (published)" if publish else " (draft)"))
 
+    @app.cli.command("update-story")
+    @click.argument("slug")
+    @click.option("--title", help="Replace the story title.")
+    @click.option("--body", help="Replace the story body (Markdown).")
+    @click.option("--category", help="Human of Bundjalung, Interview, News, or Story.")
+    @click.option("--excerpt", help="Short teaser shown on the stories list page.")
+    @click.option("--youtube-id", help="YouTube video ID for the featured video.")
+    @click.option("--social-url", help="Instagram or Facebook post/video URL.")
+    @click.option("--publish/--draft", "published", default=None, help="Publish, or revert to a draft.")
+    def update_story_command(slug, title, body, category, excerpt, youtube_id, social_url, published):
+        """Set one or more fields on an existing story (e.g. swapping in a real
+        YouTube video once it clears upload processing)."""
+        from .update_story import update_story
+
+        fields = {}
+        if title is not None:
+            fields["title"] = title
+        if body is not None:
+            fields["body"] = body
+        if category is not None:
+            fields["category"] = category
+        if excerpt is not None:
+            fields["excerpt"] = excerpt
+        if youtube_id is not None:
+            fields["youtube_id"] = youtube_id
+        if social_url is not None:
+            fields["social_url"] = social_url
+        if published is not None:
+            fields["published"] = published
+        story_title = update_story(slug, **fields)
+        click.echo(f"Updated '{story_title}'.")
+
     @app.cli.command("link-performers")
     def link_performers_command():
         """Backfill performer links for every existing gig by splitting its
