@@ -49,7 +49,10 @@ def register_cli(app):
     @click.option("--html", "html_files", multiple=True, type=click.Path(exists=True),
                   help="Parse saved gig guide pages instead of fetching (repeatable). "
                        "Use when Cloudflare blocks direct fetching.")
-    def scrape_echo_command(town, out_file, html_files):
+    @click.option("--extra-weeks", default=12, show_default=True,
+                  help="Also check this many weeks past the ~4 in the Echo's week menu, "
+                       "which still list the odd far-ahead gig.")
+    def scrape_echo_command(town, out_file, html_files, extra_weeks):
         """Scrape the Echo's North Coast gig guide (every week it publishes ahead)
         into a JSON file for `import-gigs`."""
         from .scrape_echo import ScrapeBlocked, merge_gigs, scrape, write_gigs
@@ -62,7 +65,7 @@ def register_cli(app):
             gigs = merge_gigs(pages, town)
         else:
             try:
-                gigs = scrape(town)
+                gigs = scrape(town, extra_weeks)
             except ScrapeBlocked as e:
                 raise click.ClickException(str(e))
         write_gigs(gigs, out_file, town)

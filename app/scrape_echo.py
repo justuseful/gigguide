@@ -1,7 +1,7 @@
 import html
 import json
 import re
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from urllib.parse import unquote_plus
 
 import requests
@@ -116,7 +116,19 @@ def fetch(params: dict | None = None, session: requests.Session | None = None) -
     return resp.text
 
 
-def scrape(town: str | None = None) -> list[dict]:
+def weeks_to_fetch(menu_weeks: list[tuple[int, int]], extra_weeks: int) -> list[tuple[int, int]]:
+    """The menu weeks plus `extra_weeks` more after the last one. The "Select
+    Week" menu only offers ~4 weeks, but pages past it still list the odd
+    far-ahead gig (e.g. a monthly open mic booked through December)."""
+    if not menu_weeks:
+        return []
+    y, w = menu_weeks[-1]
+    last = date.fromisocalendar(y, w, 1)
+    extra = [(last + timedelta(weeks=n)).isocalendar()[:2] for n in range(1, extra_weeks + 1)]
+    return menu_weeks + [(int(y), int(w)) for y, w in extra]
+
+
+def scrape(town: str | None = None, extra_weeks: int = 12) -> list[dict]:
     """Fetch every week the Echo currently publishes (optionally filtered to
     one town) and return the combined, de-duplicated gig list."""
     session = requests.Session()
@@ -127,7 +139,10 @@ def scrape(town: str | None = None) -> list[dict]:
         if cid is None:
             raise ValueError(f"The Echo has no town called {town!r} in its gig guide")
         params["cityid"] = cid
-    pages = [fetch({**params, "gpy": y, "gpw": w}, session) for y, w in list_weeks(first)]
+    pages = [
+        fetch({**params, "gpy": y, "gpw": w}, session)
+        for y, w in weeks_to_fetch(list_weeks(first), extra_weeks)
+    ]
     return merge_gigs(pages, town)
 
 
@@ -151,7 +166,7 @@ def write_gigs(gigs: list[dict], out_file: str, town: str | None = None) -> None
     data = {
         "source": GIG_GUIDE_URL,
         "scraped": date.today().isoformat(),
-        "note": f"{town or 'All towns'} gigs from the weeks the Echo publishes ahead ({span}). "
+        "note": f"{town or 'All towns'} gigs from the Echo gig guide ({span}). "
                 "Re-scrape periodically to keep listings current.",
         "gigs": gigs,
     }

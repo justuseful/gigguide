@@ -1,7 +1,7 @@
 {
   "source": "https://www.echo.net.au/gig-guide-2/",
   "scraped": "2026-09-25",
-  "note": "Byron Bay gigs from the weeks the Echo publishes ahead (2026-09-21 to 2026-10-18). Re-scrape periodically to keep listings current.",
+  "note": "Byron Bay gigs from the Echo gig guide (2026-09-21 to 2026-12-17). Re-scrape periodically to keep listings current.",
   "gigs": [
     {
       "venue": "Palace Cinemas",
@@ -604,6 +604,34 @@
       "title": "Byron Ballet – The Nutcracker",
       "gig_date": "2026-10-18",
       "start_time": "17:00"
+    },
+    {
+      "venue": "Garden Bar",
+      "town": "Byron Bay",
+      "title": "Temple of Fire",
+      "gig_date": "2026-10-22",
+      "start_time": "19:30"
+    },
+    {
+      "venue": "Garden Bar",
+      "town": "Byron Bay",
+      "title": "Temple of Fire",
+      "gig_date": "2026-10-29",
+      "start_time": "19:30"
+    },
+    {
+      "venue": "North Byron Hotel",
+      "town": "Byron Bay",
+      "title": "Open Mic",
+      "gig_date": "2026-11-19",
+      "start_time": "17:30"
+    },
+    {
+      "venue": "North Byron Hotel",
+      "town": "Byron Bay",
+      "title": "Open Mic",
+      "gig_date": "2026-12-17",
+      "start_time": "17:30"
     }
   ]
 }
