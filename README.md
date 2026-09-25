@@ -74,3 +74,12 @@ that up later is a small, low-risk addition, not a rebuild.
   copy for up to 5 minutes; a hard refresh always shows the current state. Admin pages are never cached.
 - Featured gigs (paid placement) are pinned to the top of the guide and highlighted.
 - Put Cloudflare in front once a domain is chosen: free SSL, caching and DDoS protection.
+
+## Echo gig guide scrape
+
+`flask --app wsgi scrape-echo --town "Byron Bay" --out app/data/echo_gigs_byron_bay.json` fetches
+every week the Echo's gig guide publishes ahead (omit `--town` for all towns) and writes JSON for
+`import-gigs`. Cloudflare often blocks non-browser requests from servers; if it does, save each
+week's page from a browser (`https://www.echo.net.au/gig-guide-2/?gpy=2026&gpw=<week>&cityid=5`,
+cityid 5 = Byron Bay) and pass them with `--html page1.html --html page2.html ...`. Then run
+`import-venues app/data/echo_venues.json` (for any new venues) and `import-gigs <file>`.

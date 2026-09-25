@@ -1,0 +1,609 @@
+{
+  "source": "https://www.echo.net.au/gig-guide-2/",
+  "scraped": "2026-09-25",
+  "note": "Byron Bay gigs from the weeks the Echo publishes ahead (2026-09-21 to 2026-10-18). Re-scrape periodically to keep listings current.",
+  "gigs": [
+    {
+      "venue": "Palace Cinemas",
+      "town": "Byron Bay",
+      "title": "Italian Film Festival",
+      "gig_date": "2026-09-21",
+      "start_time": null
+    },
+    {
+      "venue": "Railway Hotel",
+      "town": "Byron Bay",
+      "title": "Adam Harpaz",
+      "gig_date": "2026-09-21",
+      "start_time": null
+    },
+    {
+      "venue": "Lone Goat Gallery",
+      "town": "Byron Bay",
+      "title": "Exhibition opening – ’More Salt Please’",
+      "gig_date": "2026-09-21",
+      "start_time": "17:00"
+    },
+    {
+      "venue": "Beach Hotel",
+      "town": "Byron Bay",
+      "title": "Luke Pauley",
+      "gig_date": "2026-09-21",
+      "start_time": "18:00"
+    },
+    {
+      "venue": "The Northern",
+      "town": "Byron Bay",
+      "title": "Lachy Dwyer + Dueling Piano Bar",
+      "gig_date": "2026-09-21",
+      "start_time": "18:00"
+    },
+    {
+      "venue": "Howl & Moan",
+      "town": "Byron Bay",
+      "title": "Guy Brown",
+      "gig_date": "2026-09-21",
+      "start_time": "19:00"
+    },
+    {
+      "venue": "Palace Cinemas",
+      "town": "Byron Bay",
+      "title": "Italian Film Festival",
+      "gig_date": "2026-09-22",
+      "start_time": null
+    },
+    {
+      "venue": "Railway Hotel",
+      "town": "Byron Bay",
+      "title": "Jason Delphin",
+      "gig_date": "2026-09-22",
+      "start_time": null
+    },
+    {
+      "venue": "Beach Hotel",
+      "town": "Byron Bay",
+      "title": "Devu",
+      "gig_date": "2026-09-22",
+      "start_time": "18:00"
+    },
+    {
+      "venue": "The Northern",
+      "town": "Byron Bay",
+      "title": "Marshall Okell + Dueling Piano Bar",
+      "gig_date": "2026-09-22",
+      "start_time": "18:00"
+    },
+    {
+      "venue": "Palace Cinemas",
+      "town": "Byron Bay",
+      "title": "Italian Film Festival",
+      "gig_date": "2026-09-23",
+      "start_time": null
+    },
+    {
+      "venue": "Railway Hotel",
+      "town": "Byron Bay",
+      "title": "Slim Pickens",
+      "gig_date": "2026-09-23",
+      "start_time": null
+    },
+    {
+      "venue": "Beach Hotel",
+      "town": "Byron Bay",
+      "title": "Lilli Fairfax Band",
+      "gig_date": "2026-09-23",
+      "start_time": "18:00"
+    },
+    {
+      "venue": "The Northern",
+      "town": "Byron Bay",
+      "title": "Felicity Lawless + Dueling Piano Bar",
+      "gig_date": "2026-09-23",
+      "start_time": "18:00"
+    },
+    {
+      "venue": "Palace Cinemas",
+      "town": "Byron Bay",
+      "title": "Italian Film Festival",
+      "gig_date": "2026-09-24",
+      "start_time": null
+    },
+    {
+      "venue": "Railway Hotel",
+      "town": "Byron Bay",
+      "title": "Hillbilly Skank Duo",
+      "gig_date": "2026-09-24",
+      "start_time": null
+    },
+    {
+      "venue": "Beach Hotel",
+      "town": "Byron Bay",
+      "title": "Lecia Louise w/ Corner Pocket",
+      "gig_date": "2026-09-24",
+      "start_time": "18:00"
+    },
+    {
+      "venue": "The Northern",
+      "town": "Byron Bay",
+      "title": "Dan Hannaford + DJ Renee Simone + Dueling Pianos",
+      "gig_date": "2026-09-24",
+      "start_time": "18:00"
+    },
+    {
+      "venue": "Garden Bar",
+      "town": "Byron Bay",
+      "title": "Temple of Fire",
+      "gig_date": "2026-09-24",
+      "start_time": "19:30"
+    },
+    {
+      "venue": "Palace Cinemas",
+      "town": "Byron Bay",
+      "title": "Italian Film Festival",
+      "gig_date": "2026-09-25",
+      "start_time": null
+    },
+    {
+      "venue": "Railway Hotel",
+      "town": "Byron Bay",
+      "title": "JB’s Blues Breakers",
+      "gig_date": "2026-09-25",
+      "start_time": null
+    },
+    {
+      "venue": "Beach Hotel",
+      "town": "Byron Bay",
+      "title": "Lachie Dwyer + Madison Kat",
+      "gig_date": "2026-09-25",
+      "start_time": "17:00"
+    },
+    {
+      "venue": "Elements of Byron",
+      "town": "Byron Bay",
+      "title": "Guy & Nicci",
+      "gig_date": "2026-09-25",
+      "start_time": "17:00"
+    },
+    {
+      "venue": "North Byron Hotel",
+      "town": "Byron Bay",
+      "title": "Jerome Williams",
+      "gig_date": "2026-09-25",
+      "start_time": "17:00"
+    },
+    {
+      "venue": "Byron Theatre",
+      "town": "Byron Bay",
+      "title": "Bright Lights – Grease The Musical",
+      "gig_date": "2026-09-25",
+      "start_time": "19:00"
+    },
+    {
+      "venue": "The Northern",
+      "town": "Byron Bay",
+      "title": "Kane Muir Band + Dueling Pianos",
+      "gig_date": "2026-09-25",
+      "start_time": "19:00"
+    },
+    {
+      "venue": "The Northern",
+      "town": "Byron Bay",
+      "title": "Lilli Sheen",
+      "gig_date": "2026-09-25",
+      "start_time": "19:00"
+    },
+    {
+      "venue": "Palace Cinemas",
+      "town": "Byron Bay",
+      "title": "Italian Film Festival",
+      "gig_date": "2026-09-26",
+      "start_time": null
+    },
+    {
+      "venue": "Railway Hotel",
+      "town": "Byron Bay",
+      "title": "The Swamp Cats",
+      "gig_date": "2026-09-26",
+      "start_time": null
+    },
+    {
+      "venue": "Byron Theatre",
+      "town": "Byron Bay",
+      "title": "Bright Lights – Grease The Musical",
+      "gig_date": "2026-09-26",
+      "start_time": "14:00"
+    },
+    {
+      "venue": "Beach Hotel",
+      "town": "Byron Bay",
+      "title": "DJ Longtime",
+      "gig_date": "2026-09-26",
+      "start_time": "17:00"
+    },
+    {
+      "venue": "Byron Theatre",
+      "town": "Byron Bay",
+      "title": "Bright Lights – Grease The Musical",
+      "gig_date": "2026-09-26",
+      "start_time": "19:00"
+    },
+    {
+      "venue": "The Northern",
+      "town": "Byron Bay",
+      "title": "Cath Simes",
+      "gig_date": "2026-09-26",
+      "start_time": "19:00"
+    },
+    {
+      "venue": "The Northern",
+      "town": "Byron Bay",
+      "title": "JB’s Blues Breakers + DJ Oren Selecta + Dueling Pianos + Hypnotize",
+      "gig_date": "2026-09-26",
+      "start_time": "19:00"
+    },
+    {
+      "venue": "Palace Cinemas",
+      "town": "Byron Bay",
+      "title": "Italian Film Festival",
+      "gig_date": "2026-09-27",
+      "start_time": null
+    },
+    {
+      "venue": "Railway Hotel",
+      "town": "Byron Bay",
+      "title": "Andy Jans Brown Duo",
+      "gig_date": "2026-09-27",
+      "start_time": null
+    },
+    {
+      "venue": "Beach Hotel",
+      "town": "Byron Bay",
+      "title": "Soft Treadly + DJ Longtime",
+      "gig_date": "2026-09-27",
+      "start_time": "16:30"
+    },
+    {
+      "venue": "The Northern",
+      "town": "Byron Bay",
+      "title": "Dizzy J + Vinyl Sundays ft. Eric Downer + Dueling Pianos",
+      "gig_date": "2026-09-27",
+      "start_time": "17:00"
+    },
+    {
+      "venue": "Palace Cinemas",
+      "town": "Byron Bay",
+      "title": "Italian Film Festival",
+      "gig_date": "2026-09-28",
+      "start_time": null
+    },
+    {
+      "venue": "Railway Hotel",
+      "town": "Byron Bay",
+      "title": "Resonant Hand",
+      "gig_date": "2026-09-28",
+      "start_time": null
+    },
+    {
+      "venue": "Beach Hotel",
+      "town": "Byron Bay",
+      "title": "Harry Nichols",
+      "gig_date": "2026-09-28",
+      "start_time": "18:00"
+    },
+    {
+      "venue": "The Northern",
+      "town": "Byron Bay",
+      "title": "Jerome Williams + Dueling Pianos",
+      "gig_date": "2026-09-28",
+      "start_time": "18:00"
+    },
+    {
+      "venue": "Palace Cinemas",
+      "town": "Byron Bay",
+      "title": "Italian Film Festival",
+      "gig_date": "2026-09-29",
+      "start_time": null
+    },
+    {
+      "venue": "Railway Hotel",
+      "town": "Byron Bay",
+      "title": "Sam Buckley",
+      "gig_date": "2026-09-29",
+      "start_time": null
+    },
+    {
+      "venue": "Beach Hotel",
+      "town": "Byron Bay",
+      "title": "Matthew Armitage",
+      "gig_date": "2026-09-29",
+      "start_time": "18:00"
+    },
+    {
+      "venue": "Casa Luna",
+      "town": "Byron Bay",
+      "title": "Hush Poetry",
+      "gig_date": "2026-09-29",
+      "start_time": "18:00"
+    },
+    {
+      "venue": "The Northern",
+      "town": "Byron Bay",
+      "title": "Marshall O’Kell + Dueling Pianos",
+      "gig_date": "2026-09-29",
+      "start_time": "18:00"
+    },
+    {
+      "venue": "Palace Cinemas",
+      "town": "Byron Bay",
+      "title": "Italian Film Festival",
+      "gig_date": "2026-09-30",
+      "start_time": null
+    },
+    {
+      "venue": "Railway Hotel",
+      "town": "Byron Bay",
+      "title": "Lachlan Jacques",
+      "gig_date": "2026-09-30",
+      "start_time": null
+    },
+    {
+      "venue": "Beach Hotel",
+      "town": "Byron Bay",
+      "title": "Noah Robertson",
+      "gig_date": "2026-09-30",
+      "start_time": "18:00"
+    },
+    {
+      "venue": "The Northern",
+      "town": "Byron Bay",
+      "title": "Hayley Grace + Dueling Piano Bar",
+      "gig_date": "2026-09-30",
+      "start_time": "18:00"
+    },
+    {
+      "venue": "Palace Cinemas",
+      "town": "Byron Bay",
+      "title": "Italian Film Festival",
+      "gig_date": "2026-10-01",
+      "start_time": null
+    },
+    {
+      "venue": "Railway Hotel",
+      "town": "Byron Bay",
+      "title": "Phil & Tilley",
+      "gig_date": "2026-10-01",
+      "start_time": null
+    },
+    {
+      "venue": "Beach Hotel",
+      "town": "Byron Bay",
+      "title": "Marshall Hamburger Band",
+      "gig_date": "2026-10-01",
+      "start_time": "18:00"
+    },
+    {
+      "venue": "Garden Bar",
+      "town": "Byron Bay",
+      "title": "Temple of Fire",
+      "gig_date": "2026-10-01",
+      "start_time": "19:30"
+    },
+    {
+      "venue": "Palace Cinemas",
+      "town": "Byron Bay",
+      "title": "Italian Film Festival",
+      "gig_date": "2026-10-02",
+      "start_time": null
+    },
+    {
+      "venue": "Railway Hotel",
+      "town": "Byron Bay",
+      "title": "EPIC",
+      "gig_date": "2026-10-02",
+      "start_time": null
+    },
+    {
+      "venue": "Beach Hotel",
+      "town": "Byron Bay",
+      "title": "HeartBreaker",
+      "gig_date": "2026-10-02",
+      "start_time": "21:00"
+    },
+    {
+      "venue": "Palace Cinemas",
+      "town": "Byron Bay",
+      "title": "Italian Film Festival",
+      "gig_date": "2026-10-03",
+      "start_time": null
+    },
+    {
+      "venue": "Railway Hotel",
+      "town": "Byron Bay",
+      "title": "Hayley Grace",
+      "gig_date": "2026-10-03",
+      "start_time": null
+    },
+    {
+      "venue": "Stone & Wood",
+      "town": "Byron Bay",
+      "title": "Stone & Wood’s Oktoberfest",
+      "gig_date": "2026-10-03",
+      "start_time": null
+    },
+    {
+      "venue": "North Byron Hotel",
+      "town": "Byron Bay",
+      "title": "Deep Pepa",
+      "gig_date": "2026-10-03",
+      "start_time": "17:30"
+    },
+    {
+      "venue": "Beach Hotel",
+      "town": "Byron Bay",
+      "title": "Jam Hot Live",
+      "gig_date": "2026-10-03",
+      "start_time": "20:30"
+    },
+    {
+      "venue": "Palace Cinemas",
+      "town": "Byron Bay",
+      "title": "Italian Film Festival",
+      "gig_date": "2026-10-04",
+      "start_time": null
+    },
+    {
+      "venue": "Railway Hotel",
+      "town": "Byron Bay",
+      "title": "Jon J Bradley Duo",
+      "gig_date": "2026-10-04",
+      "start_time": null
+    },
+    {
+      "venue": "Stone & Wood",
+      "town": "Byron Bay",
+      "title": "Stone & Wood’s Oktoberfest",
+      "gig_date": "2026-10-04",
+      "start_time": null
+    },
+    {
+      "venue": "Beach Hotel",
+      "town": "Byron Bay",
+      "title": "Late For Woodstock + DJ Longtime",
+      "gig_date": "2026-10-04",
+      "start_time": "16:30"
+    },
+    {
+      "venue": "Palace Cinemas",
+      "town": "Byron Bay",
+      "title": "Italian Film Festival",
+      "gig_date": "2026-10-05",
+      "start_time": null
+    },
+    {
+      "venue": "Beach Hotel",
+      "town": "Byron Bay",
+      "title": "Dave McCredie",
+      "gig_date": "2026-10-05",
+      "start_time": "18:00"
+    },
+    {
+      "venue": "Palace Cinemas",
+      "town": "Byron Bay",
+      "title": "Italian Film Festival",
+      "gig_date": "2026-10-06",
+      "start_time": null
+    },
+    {
+      "venue": "Palace Cinemas",
+      "town": "Byron Bay",
+      "title": "Italian Film Festival",
+      "gig_date": "2026-10-07",
+      "start_time": null
+    },
+    {
+      "venue": "Palace Cinemas",
+      "town": "Byron Bay",
+      "title": "Italian Film Festival",
+      "gig_date": "2026-10-08",
+      "start_time": null
+    },
+    {
+      "venue": "Garden Bar",
+      "town": "Byron Bay",
+      "title": "Temple of Fire",
+      "gig_date": "2026-10-08",
+      "start_time": "19:30"
+    },
+    {
+      "venue": "Palace Cinemas",
+      "town": "Byron Bay",
+      "title": "Italian Film Festival",
+      "gig_date": "2026-10-09",
+      "start_time": null
+    },
+    {
+      "venue": "Palace Cinemas",
+      "town": "Byron Bay",
+      "title": "Italian Film Festival",
+      "gig_date": "2026-10-10",
+      "start_time": null
+    },
+    {
+      "venue": "North Byron Hotel",
+      "town": "Byron Bay",
+      "title": "Matthew Armitage + DJ Afrodisea",
+      "gig_date": "2026-10-10",
+      "start_time": "14:00"
+    },
+    {
+      "venue": "Palace Cinemas",
+      "town": "Byron Bay",
+      "title": "Italian Film Festival",
+      "gig_date": "2026-10-11",
+      "start_time": null
+    },
+    {
+      "venue": "Palace Cinemas",
+      "town": "Byron Bay",
+      "title": "Italian Film Festival",
+      "gig_date": "2026-10-12",
+      "start_time": null
+    },
+    {
+      "venue": "Palace Cinemas",
+      "town": "Byron Bay",
+      "title": "Italian Film Festival",
+      "gig_date": "2026-10-13",
+      "start_time": null
+    },
+    {
+      "venue": "Palace Cinemas",
+      "town": "Byron Bay",
+      "title": "Italian Film Festival",
+      "gig_date": "2026-10-14",
+      "start_time": null
+    },
+    {
+      "venue": "North Byron Hotel",
+      "town": "Byron Bay",
+      "title": "Open Mic",
+      "gig_date": "2026-10-15",
+      "start_time": "17:30"
+    },
+    {
+      "venue": "Garden Bar",
+      "town": "Byron Bay",
+      "title": "Temple of Fire",
+      "gig_date": "2026-10-15",
+      "start_time": "19:30"
+    },
+    {
+      "venue": "Byron Theatre",
+      "town": "Byron Bay",
+      "title": "Byron Ballet – The Nutcracker",
+      "gig_date": "2026-10-16",
+      "start_time": "19:00"
+    },
+    {
+      "venue": "Byron Theatre",
+      "town": "Byron Bay",
+      "title": "Byron Ballet – The Nutcracker",
+      "gig_date": "2026-10-17",
+      "start_time": "13:30"
+    },
+    {
+      "venue": "Byron Theatre",
+      "town": "Byron Bay",
+      "title": "Byron Ballet – The Nutcracker",
+      "gig_date": "2026-10-17",
+      "start_time": "19:00"
+    },
+    {
+      "venue": "Byron Theatre",
+      "town": "Byron Bay",
+      "title": "Byron Ballet – The Nutcracker",
+      "gig_date": "2026-10-18",
+      "start_time": "17:00"
+    }
+  ]
+}

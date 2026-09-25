@@ -42,6 +42,32 @@ def register_cli(app):
             f"{unmatched} unmatched venue(s)."
         )
 
+    @app.cli.command("scrape-echo")
+    @click.option("--town", help="Only keep gigs in this town, e.g. 'Byron Bay'.")
+    @click.option("--out", "out_file", default="app/data/echo_gigs.json", show_default=True,
+                  help="JSON file to write, in the format import-gigs reads.")
+    @click.option("--html", "html_files", multiple=True, type=click.Path(exists=True),
+                  help="Parse saved gig guide pages instead of fetching (repeatable). "
+                       "Use when Cloudflare blocks direct fetching.")
+    def scrape_echo_command(town, out_file, html_files):
+        """Scrape the Echo's North Coast gig guide (every week it publishes ahead)
+        into a JSON file for `import-gigs`."""
+        from .scrape_echo import ScrapeBlocked, merge_gigs, scrape, write_gigs
+
+        if html_files:
+            pages = []
+            for path in html_files:
+                with open(path, encoding="utf-8") as f:
+                    pages.append(f.read())
+            gigs = merge_gigs(pages, town)
+        else:
+            try:
+                gigs = scrape(town)
+            except ScrapeBlocked as e:
+                raise click.ClickException(str(e))
+        write_gigs(gigs, out_file, town)
+        click.echo(f"Wrote {len(gigs)} gig(s) to {out_file}.")
+
     @app.cli.command("merge-venues")
     @click.argument("keep_slug")
     @click.argument("remove_slug")
