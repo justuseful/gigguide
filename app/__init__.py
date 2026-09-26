@@ -107,6 +107,16 @@ def create_app(test_config: dict | None = None) -> Flask:
     def not_found(_error):
         return render_template("404.html"), 404
 
+    @app.after_request
+    def set_security_headers(resp):
+        # Baseline hardening that's safe for every response - not a CSP (this
+        # site embeds YouTube/Facebook/Instagram and links out to Stripe, so
+        # a CSP needs real per-page testing rather than a blanket add).
+        resp.headers.setdefault("X-Content-Type-Options", "nosniff")
+        resp.headers.setdefault("X-Frame-Options", "SAMEORIGIN")
+        resp.headers.setdefault("Referrer-Policy", "strict-origin-when-cross-origin")
+        return resp
+
     with app.app_context():
         database.init_db()
 
