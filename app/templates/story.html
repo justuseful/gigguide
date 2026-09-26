@@ -2,6 +2,7 @@
 {% from "_macros.html" import comment_form, social_embed %}
 {% block title %}{{ story.title }} &ndash; {{ config.SITE_NAME }}{% endblock %}
 {% block description %}{{ story.excerpt or story.title }}{% endblock %}
+{% block og_image %}{% if story.hero_image %}{{ url_for('public.uploads', filename=story.hero_image, _external=True) }}{% else %}{{ super() }}{% endif %}{% endblock %}
 {% block content %}
 <article class="story-detail">
   <span class="badge">{{ story.category }}</span>

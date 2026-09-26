@@ -2,6 +2,7 @@
 {% from "_macros.html" import gig_card, social_embed %}
 {% block title %}{{ gig.title }} at {{ gig.venue_name }} &ndash; {{ config.SITE_NAME }}{% endblock %}
 {% block description %}{{ gig.title }} live at {{ gig.venue_name }}, {{ gig.town }} on {{ gig.gig_date|date('long') }}.{% endblock %}
+{% block og_image %}{% if gig.flyer %}{{ url_for('public.uploads', filename=gig.flyer, _external=True) }}{% else %}{{ super() }}{% endif %}{% endblock %}
 {% block content %}
 <article class="gig-detail">
   {% if gig.featured %}<span class="badge badge--featured">Featured</span>{% endif %}
