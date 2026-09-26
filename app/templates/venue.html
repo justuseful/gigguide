@@ -21,4 +21,9 @@
 {% else %}
 <p class="empty">Nothing listed here yet.</p>
 {% endif %}
+
+{% if past %}
+<h2 class="section-title">Past gigs</h2>
+<div class="card-grid">{% for g in past %}{{ gig_card(g, show_date=True) }}{% endfor %}</div>
+{% endif %}
 {% endblock %}

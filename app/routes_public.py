@@ -119,12 +119,18 @@ def venue(slug):
     row = db.execute("SELECT * FROM venues WHERE slug = ?", (slug,)).fetchone()
     if row is None:
         abort(404)
+    today = today_local().isoformat()
     gigs = db.execute(
         f"SELECT {GIG_COLUMNS} {GIG_FROM} WHERE g.venue_id = ? AND g.gig_date >= ? "
         "ORDER BY g.gig_date, g.start_time",
-        (row["id"], today_local().isoformat()),
+        (row["id"], today),
     ).fetchall()
-    return render_template("venue.html", venue=row, gigs=gigs)
+    past = db.execute(
+        f"SELECT {GIG_COLUMNS} {GIG_FROM} WHERE g.venue_id = ? AND g.gig_date < ? "
+        "ORDER BY g.gig_date DESC LIMIT 12",
+        (row["id"], today),
+    ).fetchall()
+    return render_template("venue.html", venue=row, gigs=gigs, past=past)
 
 
 @bp.get("/uploads/<path:filename>")
