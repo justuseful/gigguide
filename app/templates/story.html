@@ -18,7 +18,7 @@
   {{ social_embed(story.social_url) }}
 
   {% if story.hero_image %}
-    <p><img class="flyer" src="{{ url_for('public.uploads', filename=story.hero_image) }}" alt=""></p>
+    <p><img class="flyer" src="{{ url_for('public.uploads', filename=story.hero_image) }}" alt="{{ story.title }}"></p>
   {% endif %}
 
   <div class="story-detail__body">{{ story.body|markdown }}</div>

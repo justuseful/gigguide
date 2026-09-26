@@ -2,10 +2,10 @@
 <article class="gig-card{% if gig.featured %} is-featured{% endif %}">
   <a class="gig-card__link" href="{{ url_for('public.gig', gig_id=gig.id) }}">
     {% if gig.flyer %}
-      <img class="gig-card__flyer" src="{{ url_for('public.uploads', filename=gig.flyer) }}" alt="" loading="lazy">
+      <img class="gig-card__flyer" src="{{ url_for('public.uploads', filename=gig.flyer) }}" alt="Flyer for {{ gig.title }}" loading="lazy">
     {% elif gig.display_youtube_id %}
       <span class="gig-card__flyer gig-card__flyer--video">
-        <img src="https://i.ytimg.com/vi/{{ gig.display_youtube_id }}/hqdefault.jpg" alt="" loading="lazy">
+        <img src="https://i.ytimg.com/vi/{{ gig.display_youtube_id }}/hqdefault.jpg" alt="Video for {{ gig.title }}" loading="lazy">
         <span class="gig-card__play" aria-hidden="true">&#9654;</span>
       </span>
     {% endif %}
@@ -25,7 +25,7 @@
 <article class="story-card">
   <a class="story-card__link" href="{{ url_for('public.story', slug=story.slug) }}">
     {% if story.hero_image %}
-      <img class="story-card__img" src="{{ url_for('public.uploads', filename=story.hero_image) }}" alt="" loading="lazy">
+      <img class="story-card__img" src="{{ url_for('public.uploads', filename=story.hero_image) }}" alt="{{ story.title }}" loading="lazy">
     {% endif %}
     <div class="story-card__body">
       <span class="badge">{{ story.category }}</span>
