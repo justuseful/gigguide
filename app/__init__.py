@@ -3,6 +3,7 @@ import secrets
 from pathlib import Path
 
 from flask import Flask, render_template, request, url_for
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 from . import db as database
 from .auth import csrf_token
@@ -29,6 +30,10 @@ def _secret_key(data_dir: Path) -> str:
 
 def create_app(test_config: dict | None = None) -> Flask:
     app = Flask(__name__)
+    # nginx sits in front of gunicorn and sets X-Forwarded-Proto/-For; without
+    # this, url_for(_external=True) and request.is_secure think everything is
+    # plain http since the origin nginx<->gunicorn hop itself isn't TLS.
+    app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1)
 
     data_dir = Path(os.environ.get("GIGGUIDE_DATA_DIR") or Path(app.root_path).parent / "data")
     if test_config and test_config.get("DATA_DIR"):

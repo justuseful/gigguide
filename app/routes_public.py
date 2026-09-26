@@ -1,6 +1,6 @@
 from datetime import timedelta
 
-from flask import Blueprint, abort, current_app, render_template, request, send_from_directory, url_for
+from flask import Blueprint, Response, abort, current_app, render_template, request, send_from_directory, url_for
 
 from .db import get_db
 from .util import today_local
@@ -135,6 +135,55 @@ def uploads(filename):
 @bp.get("/healthz")
 def healthz():
     return {"ok": True}
+
+
+@bp.get("/robots.txt")
+def robots_txt():
+    body = "\n".join([
+        "User-agent: *",
+        "Disallow: /admin/",
+        f"Sitemap: {url_for('public.sitemap_xml', _external=True)}",
+        "",
+    ])
+    return Response(body, mimetype="text/plain")
+
+
+@bp.get("/sitemap.xml")
+def sitemap_xml():
+    db = get_db()
+    today = today_local().isoformat()
+    urls = [
+        {"loc": url_for("public.index", _external=True)},
+        {"loc": url_for("public.stories", _external=True)},
+        {"loc": url_for("public.venues", _external=True)},
+        {"loc": url_for("public.performers", _external=True)},
+        {"loc": url_for("public.support", _external=True)},
+    ]
+    for row in db.execute(
+        "SELECT slug, updated_at FROM stories WHERE published = 1"
+    ).fetchall():
+        urls.append({
+            "loc": url_for("public.story", slug=row["slug"], _external=True),
+            "lastmod": (row["updated_at"] or "")[:10],
+        })
+    for row in db.execute("SELECT slug FROM venues ORDER BY slug").fetchall():
+        urls.append({"loc": url_for("public.venue", slug=row["slug"], _external=True)})
+    for row in db.execute("SELECT slug FROM performers ORDER BY slug").fetchall():
+        urls.append({"loc": url_for("public.performer", slug=row["slug"], _external=True)})
+    for row in db.execute(
+        "SELECT id FROM gigs WHERE gig_date >= ? ORDER BY id", (today,)
+    ).fetchall():
+        urls.append({"loc": url_for("public.gig", gig_id=row["id"], _external=True)})
+
+    parts = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
+    for u in urls:
+        parts.append("  <url>")
+        parts.append(f"    <loc>{u['loc']}</loc>")
+        if u.get("lastmod"):
+            parts.append(f"    <lastmod>{u['lastmod']}</lastmod>")
+        parts.append("  </url>")
+    parts.append("</urlset>")
+    return Response("\n".join(parts), mimetype="application/xml")
 
 
 # Registers additional routes (stories, comments, performers, support) onto this same blueprint.
