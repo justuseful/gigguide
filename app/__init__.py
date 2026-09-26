@@ -42,9 +42,9 @@ def create_app(test_config: dict | None = None) -> Flask:
         UPLOAD_DIR=str(data_dir / "uploads"),
         ADMIN_USER=os.environ.get("GIGGUIDE_ADMIN_USER", "admin"),
         ADMIN_PASSWORD=os.environ.get("GIGGUIDE_ADMIN_PASSWORD", ""),
-        SITE_NAME=os.environ.get("GIGGUIDE_SITE_NAME", "Humans of Bundjalung Gig Guide"),
+        SITE_NAME=os.environ.get("GIGGUIDE_SITE_NAME", "The Bunj"),
         SITE_TAGLINE=os.environ.get(
-            "GIGGUIDE_SITE_TAGLINE", "Live music across Byron Bay and the Northern Rivers"
+            "GIGGUIDE_SITE_TAGLINE", "Byron Bay & the Northern Rivers' live music gig guide"
         ),
         TIMEZONE=os.environ.get("GIGGUIDE_TIMEZONE", "Australia/Sydney"),
         FACEBOOK_APP_ID=os.environ.get("FACEBOOK_APP_ID", ""),

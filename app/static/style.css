@@ -7,7 +7,7 @@
   --accent2: #f0b429;
   --card: #fffdf5;
   --line: #171310;
-  --header: #0d0b0a;
+  --header: #000;
   --radius: 4px;
   --display: "Anton", Impact, "Arial Narrow", sans-serif;
   --heading: "Oswald", system-ui, sans-serif;
@@ -47,7 +47,10 @@ img { max-width: 100%; }
   font-size: 1.5rem;
   letter-spacing: 0.03em;
   text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
 }
+.brand__logo { height: 2.6rem; width: auto; display: block; }
 .site-header nav a {
   color: #ddd;
   text-decoration: none;
