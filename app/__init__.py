@@ -59,6 +59,11 @@ def create_app(test_config: dict | None = None) -> Flask:
         SUPPORT_PAYPAL_URL=os.environ.get("GIGGUIDE_PAYPAL_URL", ""),
         ARTIST_PRO_MONTHLY_URL=os.environ.get("GIGGUIDE_ARTIST_PRO_MONTHLY_URL", ""),
         ARTIST_PRO_ANNUAL_URL=os.environ.get("GIGGUIDE_ARTIST_PRO_ANNUAL_URL", ""),
+        # The same content is reachable on humansofbundjalung.com, thebunj.com and
+        # www.thebunj.com (all proxied to this one app) - a canonical link tag tells
+        # search engines to consolidate ranking onto one domain instead of treating
+        # them as duplicate content.
+        CANONICAL_ORIGIN=os.environ.get("GIGGUIDE_CANONICAL_ORIGIN", "https://thebunj.com"),
         MAX_CONTENT_LENGTH=5 * 1024 * 1024,
         SESSION_COOKIE_SAMESITE="Lax",
         SESSION_COOKIE_HTTPONLY=True,
