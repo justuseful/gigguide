@@ -26,6 +26,7 @@ MIGRATIONS = [
     ("gigs", "recurrence_active", "INTEGER NOT NULL DEFAULT 1"),
     ("gigs", "series_id", "INTEGER"),
     ("gigs", "social_url", "TEXT"),
+    ("gigs", "presented_by", "TEXT"),
     ("performers", "social_url", "TEXT"),
     ("performers", "related_performers", "TEXT"),
     ("performers", "based_in", "TEXT"),

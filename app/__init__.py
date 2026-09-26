@@ -8,6 +8,7 @@ from . import db as database
 from .auth import csrf_token
 from .cli import register_cli
 from .filters import register_filters
+from .presenters import PRESENTERS
 from .routes_admin import bp as admin_bp
 from .routes_public import bp as public_bp
 
@@ -79,6 +80,7 @@ def create_app(test_config: dict | None = None) -> Flask:
         return url_for("static", filename=filename, v=version)
 
     app.jinja_env.globals["static_url"] = static_url
+    app.jinja_env.globals["presenters"] = PRESENTERS
 
     @app.context_processor
     def inject_sponsors():

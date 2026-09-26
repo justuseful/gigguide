@@ -11,7 +11,7 @@ BOT_HINTS = ("bot", "crawl", "spider", "slurp", "curl", "wget", "python-requests
 
 GIG_COLUMNS = """
     g.id, g.venue_id, g.title, g.gig_date, g.start_time, g.price, g.ticket_url,
-    g.youtube_id, g.social_url, g.flyer, g.description, g.featured,
+    g.youtube_id, g.social_url, g.flyer, g.description, g.featured, g.presented_by,
     v.name AS venue_name, v.slug AS venue_slug, v.town AS town,
     v.address AS venue_address, v.website AS venue_website, v.instagram AS venue_instagram,
     COALESCE(g.youtube_id, (

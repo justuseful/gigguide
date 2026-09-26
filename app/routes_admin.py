@@ -102,6 +102,7 @@ def _gig_form_data() -> dict:
         "social": (f.get("social") or "").strip(),
         "description": (f.get("description") or "").strip() or None,
         "featured": 1 if f.get("featured") else 0,
+        "presented_by": (f.get("presented_by") or "").strip() or None,
         "performer_ids": f.getlist("performer_ids", type=int),
         "repeat_weekly": bool(f.get("repeat_weekly")),
     }
@@ -217,11 +218,11 @@ def gig_new():
             ), 400
         cur = db.execute(
             "INSERT INTO gigs (venue_id, title, gig_date, start_time, price, ticket_url, "
-            "youtube_id, social_url, flyer, description, featured) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+            "youtube_id, social_url, flyer, description, featured, presented_by) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
             (
                 data["venue_id"], data["title"], data["gig_date"], data["start_time"], data["price"],
                 data["ticket_url"], data["youtube_id"], data["social_url"], flyer, data["description"],
-                data["featured"],
+                data["featured"], data["presented_by"],
             ),
         )
         new_id = cur.lastrowid
@@ -278,11 +279,11 @@ def gig_edit(gig_id):
             flyer = new_flyer
         db.execute(
             "UPDATE gigs SET venue_id=?, title=?, gig_date=?, start_time=?, price=?, ticket_url=?, "
-            "youtube_id=?, social_url=?, flyer=?, description=?, featured=?, updated_at=datetime('now') WHERE id=?",
+            "youtube_id=?, social_url=?, flyer=?, description=?, featured=?, presented_by=?, updated_at=datetime('now') WHERE id=?",
             (
                 data["venue_id"], data["title"], data["gig_date"], data["start_time"], data["price"],
                 data["ticket_url"], data["youtube_id"], data["social_url"], flyer, data["description"],
-                data["featured"], gig_id,
+                data["featured"], data["presented_by"], gig_id,
             ),
         )
         _set_gig_performers(db, gig_id, data["performer_ids"])

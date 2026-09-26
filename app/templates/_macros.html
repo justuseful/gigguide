@@ -1,3 +1,8 @@
+{% macro presenter_badge(name, size="sm") %}
+{% set p = presenters.get(name) if name else None %}
+{% if p %}<span class="presenter presenter--{{ size }}"><span class="presenter__label">presented by</span> <img class="presenter__logo" src="{{ static_url(p.logo) }}" alt="{{ name }}"></span>{% endif %}
+{% endmacro %}
+
 {% macro gig_card(gig, show_date=False) %}
 <article class="gig-card{% if gig.featured %} is-featured{% endif %}">
   <a class="gig-card__link" href="{{ url_for('public.gig', gig_id=gig.id) }}">
@@ -16,6 +21,7 @@
       </p>
       {% if gig.featured %}<span class="badge badge--featured">Featured</span>{% endif %}
       {% if gig.display_youtube_id %}<span class="badge badge--video">&#9654; Video</span>{% endif %}
+      {{ presenter_badge(gig.presented_by) }}
     </div>
   </a>
 </article>

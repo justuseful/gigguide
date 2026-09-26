@@ -1,0 +1,162 @@
+{
+  "source": "pink-zinc",
+  "received": "2026-09-26",
+  "note": "Pink Zinc's weekend of 24-27 Sep 2026, from Sarah Grant. Import venues first (import-venues skips ones already listed), then gigs.",
+  "venues": [
+    {
+      "town": "Brunswick Heads",
+      "name": "Hotel Brunswick"
+    },
+    {
+      "town": "Cabarita Beach",
+      "name": "Cabarita Beach Hotel"
+    },
+    {
+      "town": "Chinderah",
+      "name": "Chinderah Tavern"
+    },
+    {
+      "town": "Evans Head",
+      "name": "Evans Head Bowling Club"
+    },
+    {
+      "town": "Evans Head",
+      "name": "Evans Head RSL"
+    },
+    {
+      "town": "Evans Head",
+      "name": "Illawong Hotel"
+    },
+    {
+      "town": "Kingscliff",
+      "name": "Saltbar"
+    },
+    {
+      "town": "Mullumbimby",
+      "name": "Middle Pub"
+    },
+    {
+      "town": "Suffolk Park",
+      "name": "The Park Hotel"
+    },
+    {
+      "town": "Yamba",
+      "name": "Pacific Hotel"
+    }
+  ],
+  "gigs": [
+    {
+      "venue": "Pacific Hotel",
+      "town": "Yamba",
+      "title": "Alex McLeod",
+      "gig_date": "2026-09-24",
+      "start_time": null,
+      "presented_by": "Pink Zinc"
+    },
+    {
+      "venue": "Pacific Hotel",
+      "town": "Yamba",
+      "title": "Isaac Frankham Band",
+      "gig_date": "2026-09-25",
+      "start_time": null,
+      "presented_by": "Pink Zinc"
+    },
+    {
+      "venue": "Evans Head Bowling Club",
+      "town": "Evans Head",
+      "title": "Luke Bennett",
+      "gig_date": "2026-09-25",
+      "start_time": "17:00",
+      "description": "5pm – 8pm",
+      "presented_by": "Pink Zinc"
+    },
+    {
+      "venue": "The Park Hotel",
+      "town": "Suffolk Park",
+      "title": "Phil Howell",
+      "gig_date": "2026-09-25",
+      "start_time": "17:30",
+      "presented_by": "Pink Zinc"
+    },
+    {
+      "venue": "Chinderah Tavern",
+      "town": "Chinderah",
+      "title": "Record Breakers",
+      "gig_date": "2026-09-25",
+      "start_time": "19:30",
+      "presented_by": "Pink Zinc"
+    },
+    {
+      "venue": "Saltbar",
+      "town": "Kingscliff",
+      "title": "Kane Muir",
+      "gig_date": "2026-09-26",
+      "start_time": "17:30",
+      "presented_by": "Pink Zinc"
+    },
+    {
+      "venue": "The Park Hotel",
+      "town": "Suffolk Park",
+      "title": "Josh Lee Hamilton",
+      "gig_date": "2026-09-26",
+      "start_time": "17:30",
+      "presented_by": "Pink Zinc"
+    },
+    {
+      "venue": "Hotel Brunswick",
+      "town": "Brunswick Heads",
+      "title": "Quest",
+      "gig_date": "2026-09-26",
+      "start_time": "18:00",
+      "presented_by": "Pink Zinc"
+    },
+    {
+      "venue": "Cabarita Beach Hotel",
+      "town": "Cabarita Beach",
+      "title": "Living in the 70s Duo",
+      "gig_date": "2026-09-26",
+      "start_time": "18:30",
+      "presented_by": "Pink Zinc"
+    },
+    {
+      "venue": "Evans Head RSL",
+      "town": "Evans Head",
+      "title": "Supercheeze",
+      "gig_date": "2026-09-26",
+      "start_time": "20:00",
+      "presented_by": "Pink Zinc"
+    },
+    {
+      "venue": "Illawong Hotel",
+      "town": "Evans Head",
+      "title": "Milo Green Band",
+      "gig_date": "2026-09-26",
+      "start_time": "20:00",
+      "presented_by": "Pink Zinc"
+    },
+    {
+      "venue": "Pacific Hotel",
+      "town": "Yamba",
+      "title": "Ally Palmer",
+      "gig_date": "2026-09-27",
+      "start_time": null,
+      "presented_by": "Pink Zinc"
+    },
+    {
+      "venue": "Middle Pub",
+      "town": "Mullumbimby",
+      "title": "Harry",
+      "gig_date": "2026-09-27",
+      "start_time": "15:30",
+      "presented_by": "Pink Zinc"
+    },
+    {
+      "venue": "The Park Hotel",
+      "town": "Suffolk Park",
+      "title": "Alex McLeod",
+      "gig_date": "2026-09-27",
+      "start_time": "17:30",
+      "presented_by": "Pink Zinc"
+    }
+  ]
+}

@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS gigs (
     flyer       TEXT,                       -- filename inside the uploads dir
     description TEXT,
     featured    INTEGER NOT NULL DEFAULT 0,
+    presented_by TEXT,                      -- promoter/booking agency, e.g. 'Pink Zinc' (see presenters.py)
     source      TEXT NOT NULL DEFAULT 'manual',
     recurrence        TEXT,                          -- NULL, or 'weekly'
     recurrence_active INTEGER NOT NULL DEFAULT 1,     -- set to 0 to stop generating future occurrences

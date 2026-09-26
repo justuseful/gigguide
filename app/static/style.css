@@ -141,6 +141,31 @@ img { max-width: 100%; }
 .badge--video { background: var(--fg); border-color: var(--fg); color: #fff; }
 .badge--pro { background: var(--fg); border-color: var(--accent2); color: var(--accent2); vertical-align: middle; }
 
+/* "presented by <promoter logo>" chip. Pink Zinc's logo is white lettering with a
+   black outline, so it sits on a pink panel rather than straight on the card. */
+.presenter {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0.4rem 0.25rem 0 0;
+  padding: 0.2rem 0.5rem;
+  background: #f4a6c4;
+  border: 1.5px solid var(--fg);
+  border-radius: 3px;
+  vertical-align: middle;
+}
+.presenter__label {
+  font-family: var(--heading);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--fg);
+}
+.presenter__logo { display: block; height: 2rem; width: auto; }
+.presenter--lg { margin: 0.2rem 0 0.6rem; padding: 0.35rem 0.75rem; }
+.presenter--lg .presenter__logo { height: 3.5rem; }
+
 .gig-detail h1 {
   margin: 0.3rem 0 0.2rem;
   font-family: var(--display);

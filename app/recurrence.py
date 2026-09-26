@@ -35,11 +35,11 @@ def ensure_recurring_occurrences(db, horizon_weeks: int = HORIZON_WEEKS) -> int:
         while next_date <= horizon:
             cur = db.execute(
                 "INSERT INTO gigs (venue_id, title, gig_date, start_time, price, ticket_url, "
-                "description, featured, source, recurrence, recurrence_active, series_id) "
-                "VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
+                "description, featured, presented_by, source, recurrence, recurrence_active, series_id) "
+                "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
                 (
                     latest["venue_id"], latest["title"], next_date.isoformat(), latest["start_time"],
-                    latest["price"], latest["ticket_url"], latest["description"], latest["featured"],
+                    latest["price"], latest["ticket_url"], latest["description"], latest["featured"], latest["presented_by"],
                     "manual", "weekly", 1, row["series_id"],
                 ),
             )
