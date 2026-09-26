@@ -1,7 +1,7 @@
 {
   "source": "pink-zinc",
   "received": "2026-09-26",
-  "note": "Pink Zinc's weekend of 24-27 Sep 2026, from Sarah Grant. Import venues first (import-venues skips ones already listed), then gigs.",
+  "note": "Pink Zinc's weekend of 24-27 Sep 2026, from Sarah Grant. Import venues first (import-venues skips ones already listed), then gigs. Cross-checked against the Echo gig guide on 26 Sep: Harry Nichols (Middle Pub) and Kane Muir (Saltbar, Echo says 6pm) are also listed there, so importing credits those existing listings instead of duplicating them.",
   "venues": [
     {
       "town": "Brunswick Heads",
@@ -145,7 +145,7 @@
     {
       "venue": "Middle Pub",
       "town": "Mullumbimby",
-      "title": "Harry",
+      "title": "Harry Nichols",
       "gig_date": "2026-09-27",
       "start_time": "15:30",
       "presented_by": "Pink Zinc"
