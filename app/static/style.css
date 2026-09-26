@@ -50,7 +50,7 @@ img { max-width: 100%; }
   display: inline-flex;
   align-items: center;
 }
-.brand__logo { height: 2.6rem; width: auto; display: block; }
+.brand__logo { height: 4.2rem; width: auto; display: block; }
 .site-header nav a {
   color: #ddd;
   text-decoration: none;
