@@ -29,6 +29,7 @@ CREATE TABLE IF NOT EXISTS gigs (
     recurrence        TEXT,                          -- NULL, or 'weekly'
     recurrence_active INTEGER NOT NULL DEFAULT 1,     -- set to 0 to stop generating future occurrences
     series_id         INTEGER,                        -- id of the first gig in this weekly series (self on that row)
+    is_jam_night INTEGER NOT NULL DEFAULT 0,           -- shown on the separate Jam Nights page
     created_at  TEXT NOT NULL DEFAULT (datetime('now')),
     updated_at  TEXT NOT NULL DEFAULT (datetime('now'))
 );

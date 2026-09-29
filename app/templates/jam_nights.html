@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% from "_macros.html" import gig_card %}
+{% block title %}Jam Nights &ndash; {{ config.SITE_NAME }}{% endblock %}
+{% block description %}Open mics, jam nights and regular sessions across Byron Bay and the Northern Rivers.{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1>Jam Nights</h1>
+  <p>Open mics and regular sessions &ndash; showing the next date for each.</p>
+</section>
+{% if gigs %}
+<div class="card-grid">{% for g in gigs %}{{ gig_card(g, show_date=True) }}{% endfor %}</div>
+{% else %}
+<p class="empty">Nothing listed yet.</p>
+{% endif %}
+{% endblock %}

@@ -162,6 +162,7 @@ def sitemap_xml():
         {"loc": url_for("public.index", _external=True)},
         {"loc": url_for("public.stories", _external=True)},
         {"loc": url_for("public.venues", _external=True)},
+        {"loc": url_for("public.jam_nights", _external=True)},
         {"loc": url_for("public.performers", _external=True)},
         {"loc": url_for("public.support", _external=True)},
     ]
@@ -192,7 +193,8 @@ def sitemap_xml():
     return Response("\n".join(parts), mimetype="application/xml")
 
 
-# Registers additional routes (stories, comments, performers, support) onto this same blueprint.
+# Registers additional routes (stories, comments, performers, support, jam nights) onto this same blueprint.
 from . import routes_stories  # noqa: E402,F401
 from . import routes_performers  # noqa: E402,F401
 from . import routes_support  # noqa: E402,F401
+from . import routes_jam_nights  # noqa: E402,F401

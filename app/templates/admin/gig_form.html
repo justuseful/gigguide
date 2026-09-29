@@ -91,6 +91,10 @@
     <label class="check"><input type="checkbox" name="featured" value="1" {% if gig.featured %}checked{% endif %}> Featured (paid placement &ndash; shown at the top of the guide)</label>
   </div>
 
+  <div class="field">
+    <label class="check"><input type="checkbox" name="is_jam_night" value="1" {% if gig.is_jam_night %}checked{% endif %}> Jam night (shown on the separate Jam Nights page)</label>
+  </div>
+
   {% if gig.series_id %}
   <div class="field">
     <label>Repeats</label>
