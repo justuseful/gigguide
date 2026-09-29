@@ -10,6 +10,7 @@ from .auth import csrf_token
 from .cli import register_cli
 from .filters import register_filters
 from .routes_admin import bp as admin_bp
+from .routes_automation import bp as automation_bp
 from .routes_public import bp as public_bp
 
 
@@ -64,6 +65,10 @@ def create_app(test_config: dict | None = None) -> Flask:
         # search engines to consolidate ranking onto one domain instead of treating
         # them as duplicate content.
         CANONICAL_ORIGIN=os.environ.get("GIGGUIDE_CANONICAL_ORIGIN", "https://thebunj.com"),
+        # Bearer token for the scheduled venue-website cross-check agent's
+        # insert-only API (routes_automation.py) - deliberately separate
+        # from ADMIN_PASSWORD so it can be rotated without touching login.
+        AUTOMATION_TOKEN=os.environ.get("GIGGUIDE_AUTOMATION_TOKEN", ""),
         MAX_CONTENT_LENGTH=5 * 1024 * 1024,
         SESSION_COOKIE_SAMESITE="Lax",
         SESSION_COOKIE_HTTPONLY=True,
@@ -102,6 +107,7 @@ def create_app(test_config: dict | None = None) -> Flask:
 
     app.register_blueprint(public_bp)
     app.register_blueprint(admin_bp, url_prefix="/admin")
+    app.register_blueprint(automation_bp, url_prefix="/api/automation")
 
     @app.errorhandler(404)
     def not_found(_error):

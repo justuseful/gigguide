@@ -148,6 +148,7 @@ def robots_txt():
     body = "\n".join([
         "User-agent: *",
         "Disallow: /admin/",
+        "Disallow: /api/",
         f"Sitemap: {url_for('public.sitemap_xml', _external=True)}",
         "",
     ])
