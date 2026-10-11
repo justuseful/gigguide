@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS gigs (
     recurrence_active INTEGER NOT NULL DEFAULT 1,     -- set to 0 to stop generating future occurrences
     series_id         INTEGER,                        -- id of the first gig in this weekly series (self on that row)
     is_jam_night INTEGER NOT NULL DEFAULT 0,           -- shown on the separate Jam Nights page
+    genre       TEXT,                       -- ',jazz,blues,' overrides the performers' genres for this gig
     created_at  TEXT NOT NULL DEFAULT (datetime('now')),
     updated_at  TEXT NOT NULL DEFAULT (datetime('now'))
 );
@@ -49,6 +50,8 @@ CREATE TABLE IF NOT EXISTS performers (
     social_url  TEXT,          -- Instagram or Facebook post/video link
     related_performers TEXT,   -- comma-separated slugs of other performers mentioned on this profile
     based_in    TEXT,          -- town/region they're based in, e.g. "Byron Bay"
+    genre       TEXT,          -- ',jazz,blues,' (commas both ends, see genres.py)
+    spotify     TEXT,          -- newline-separated 'track/ID', 'album/ID', 'playlist/ID' or 'artist/ID' embeds
     booking     TEXT,          -- free text: email, phone, manager, "book via Instagram DM", etc.
     is_pro      INTEGER NOT NULL DEFAULT 0,  -- paid "Artist Pro" subscriber
     pro_until   TEXT,          -- ISO date the subscription covers through, NULL = no expiry set

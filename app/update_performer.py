@@ -1,9 +1,10 @@
 from .db import get_db
+from .genres import parse_genres, parse_spotify
 from .link_performers import get_or_create_performer, refresh_pro_featuring_for_performer
 
 FIELDS = {
     "bio", "youtube_id", "social_url", "related_performers", "website", "instagram",
-    "based_in", "booking", "is_pro", "pro_until",
+    "based_in", "booking", "is_pro", "pro_until", "genre", "spotify",
 }
 # Fields where 0/False is a meaningful value, not "clear this field" - unlike the
 # text fields, an empty string doesn't apply to them.
@@ -26,6 +27,10 @@ def update_performer(slug: str, **fields) -> str:
     if performer is None:
         raise ValueError(f"No performer with slug {slug!r}")
 
+    if "genre" in fields:
+        fields["genre"] = parse_genres(fields["genre"])
+    if "spotify" in fields:
+        fields["spotify"] = parse_spotify(fields["spotify"])
     updates = ", ".join(f"{field} = ?" for field in fields)
     params = [
         int(value) if field in BOOLEAN_FIELDS else (value or None)

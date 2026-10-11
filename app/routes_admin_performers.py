@@ -1,6 +1,7 @@
 from flask import flash, redirect, render_template, request, url_for
 
 from .db import get_db
+from .genres import GENRES, parse_genres, parse_spotify
 from .link_performers import refresh_pro_featuring_for_performer
 from .routes_admin import bp, parse_social_url, parse_youtube_id
 from .util import slugify, unique_slug
@@ -19,6 +20,8 @@ def _performer_form_data() -> dict:
         "booking": (f.get("booking") or "").strip() or None,
         "is_pro": 1 if f.get("is_pro") else 0,
         "pro_until": (f.get("pro_until") or "").strip() or None,
+        "genre_list": f.getlist("genre"),
+        "spotify_raw": (f.get("spotify") or "").strip(),
     }
 
 
@@ -32,6 +35,14 @@ def _validate_performer(data: dict) -> list[str]:
         errors.append(str(exc))
     try:
         data["social_url"] = parse_social_url(data["social"]) or None
+    except ValueError as exc:
+        errors.append(str(exc))
+    try:
+        data["genre"] = parse_genres(data["genre_list"])
+    except ValueError as exc:
+        errors.append(str(exc))
+    try:
+        data["spotify"] = parse_spotify(data["spotify_raw"])
     except ValueError as exc:
         errors.append(str(exc))
     return errors
@@ -62,9 +73,10 @@ def performer_new():
         slug = unique_slug(db, "performers", slugify(data["name"]))
         db.execute(
             "INSERT INTO performers (slug, name, bio, instagram, website, youtube_id, social_url, "
-            "based_in, booking, is_pro, pro_until) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+            "based_in, booking, is_pro, pro_until, genre, spotify) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
             (slug, data["name"], data["bio"], data["instagram"], data["website"], data["youtube_id"],
-             data["social_url"], data["based_in"], data["booking"], data["is_pro"], data["pro_until"]),
+             data["social_url"], data["based_in"], data["booking"], data["is_pro"], data["pro_until"],
+             data["genre"], data["spotify"]),
         )
         db.commit()
         flash("Performer added.", "ok")
@@ -88,10 +100,10 @@ def performer_edit(performer_id):
             return render_template("admin/performer_form.html", performer=data, is_new=False), 400
         db.execute(
             "UPDATE performers SET name=?, bio=?, instagram=?, website=?, youtube_id=?, social_url=?, "
-            "based_in=?, booking=?, is_pro=?, pro_until=? WHERE id=?",
+            "based_in=?, booking=?, is_pro=?, pro_until=?, genre=?, spotify=? WHERE id=?",
             (data["name"], data["bio"], data["instagram"], data["website"], data["youtube_id"],
              data["social_url"], data["based_in"], data["booking"], data["is_pro"], data["pro_until"],
-             performer_id),
+             data["genre"], data["spotify"], performer_id),
         )
         if data["is_pro"]:
             refresh_pro_featuring_for_performer(db, performer_id)

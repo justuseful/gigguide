@@ -1,0 +1,6 @@
+{# expects: sel = list of selected genre slugs #}
+<div class="genre-picker">
+  {% for slug, label in GENRES %}
+  <label class="check"><input type="checkbox" name="genre" value="{{ slug }}" {% if slug in sel %}checked{% endif %}> {{ label }}</label>
+  {% endfor %}
+</div>

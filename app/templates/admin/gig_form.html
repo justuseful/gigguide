@@ -92,6 +92,12 @@
   </div>
 
   <div class="field">
+    <label>Genre (optional)</label>
+    {% set sel = gig.genre_list if gig.genre_list is defined else (gig.genre or '').split(',') %}
+    {% include "admin/_genre_picker.html" %}
+    <small>Leave blank to use the genres of the performers tagged on this gig.</small>
+  </div>
+  <div class="field">
     <label class="check"><input type="checkbox" name="is_jam_night" value="1" {% if gig.is_jam_night %}checked{% endif %}> Jam night (shown on the separate Jam Nights page)</label>
   </div>
 

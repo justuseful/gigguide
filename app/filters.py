@@ -4,6 +4,8 @@ from urllib.parse import urlsplit
 import markdown as _markdown
 from markupsafe import Markup, escape
 
+from .genres import genre_list, spotify_embeds
+
 
 def fmt_date(value, style: str = "short") -> str:
     try:
@@ -47,8 +49,12 @@ def ig_embed_url(url: str) -> str:
 
 
 def register_filters(app):
+    from .genres import GENRES
+    app.jinja_env.globals["GENRES"] = GENRES
     app.add_template_filter(fmt_date, "date")
     app.add_template_filter(fmt_time, "time")
     app.add_template_filter(nl2p, "nl2p")
     app.add_template_filter(render_markdown, "markdown")
     app.add_template_filter(ig_embed_url, "ig_embed")
+    app.add_template_filter(genre_list, "genres")
+    app.add_template_filter(spotify_embeds, "spotify_embeds")

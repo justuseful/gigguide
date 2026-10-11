@@ -3,6 +3,7 @@ import hmac
 from flask import Blueprint, current_app, jsonify, request
 
 from .db import get_db
+from .genres import parse_genres
 from .link_performers import link_gig_performers
 from .routes_admin import parse_social_url, parse_youtube_id
 
@@ -52,13 +53,14 @@ def add_gig():
     try:
         youtube_id = parse_youtube_id(data.get("youtube_id") or "") or None
         social_url = parse_social_url(data.get("social_url") or "") or None
+        genre = parse_genres(data.get("genre")) if data.get("genre") else None
     except ValueError as exc:
         return jsonify({"error": str(exc)}), 400
 
     cur = db.execute(
         "INSERT INTO gigs (venue_id, title, gig_date, start_time, price, ticket_url, "
-        "description, is_jam_night, youtube_id, social_url, source) "
-        "VALUES (?,?,?,?,?,?,?,?,?,?,'auto-check')",
+        "description, is_jam_night, youtube_id, social_url, genre, source) "
+        "VALUES (?,?,?,?,?,?,?,?,?,?,?,'auto-check')",
         (
             venue["id"], title, gig_date,
             (data.get("start_time") or None),
@@ -68,6 +70,7 @@ def add_gig():
             1 if data.get("is_jam_night") else 0,
             youtube_id,
             social_url,
+            genre,
         ),
     )
     link_gig_performers(db, cur.lastrowid, title)

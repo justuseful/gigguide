@@ -6,6 +6,7 @@ from pathlib import Path
 from flask import Blueprint, current_app, flash, redirect, render_template, request, url_for
 
 from .auth import admin_required, check_csrf
+from .genres import parse_genres
 from .db import get_db
 from .link_performers import apply_pro_featuring
 from .recurrence import ensure_recurring_occurrences, start_series, stop_series
@@ -103,6 +104,7 @@ def _gig_form_data() -> dict:
         "description": (f.get("description") or "").strip() or None,
         "featured": 1 if f.get("featured") else 0,
         "is_jam_night": 1 if f.get("is_jam_night") else 0,
+        "genre_list": f.getlist("genre"),
         "performer_ids": f.getlist("performer_ids", type=int),
         "repeat_weekly": bool(f.get("repeat_weekly")),
     }
@@ -131,6 +133,10 @@ def _validate_gig(data: dict, db) -> list[str]:
         errors.append(str(exc))
     try:
         data["social_url"] = parse_social_url(data["social"]) or None
+    except ValueError as exc:
+        errors.append(str(exc))
+    try:
+        data["genre"] = parse_genres(data["genre_list"])
     except ValueError as exc:
         errors.append(str(exc))
     return errors
@@ -218,11 +224,11 @@ def gig_new():
             ), 400
         cur = db.execute(
             "INSERT INTO gigs (venue_id, title, gig_date, start_time, price, ticket_url, "
-            "youtube_id, social_url, flyer, description, featured, is_jam_night) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
+            "youtube_id, social_url, flyer, description, featured, is_jam_night, genre) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
             (
                 data["venue_id"], data["title"], data["gig_date"], data["start_time"], data["price"],
                 data["ticket_url"], data["youtube_id"], data["social_url"], flyer, data["description"],
-                data["featured"], data["is_jam_night"],
+                data["featured"], data["is_jam_night"], data["genre"],
             ),
         )
         new_id = cur.lastrowid
@@ -279,12 +285,12 @@ def gig_edit(gig_id):
             flyer = new_flyer
         db.execute(
             "UPDATE gigs SET venue_id=?, title=?, gig_date=?, start_time=?, price=?, ticket_url=?, "
-            "youtube_id=?, social_url=?, flyer=?, description=?, featured=?, is_jam_night=?, "
+            "youtube_id=?, social_url=?, flyer=?, description=?, featured=?, is_jam_night=?, genre=?, "
             "updated_at=datetime('now') WHERE id=?",
             (
                 data["venue_id"], data["title"], data["gig_date"], data["start_time"], data["price"],
                 data["ticket_url"], data["youtube_id"], data["social_url"], flyer, data["description"],
-                data["featured"], data["is_jam_night"], gig_id,
+                data["featured"], data["is_jam_night"], data["genre"], gig_id,
             ),
         )
         _set_gig_performers(db, gig_id, data["performer_ids"])

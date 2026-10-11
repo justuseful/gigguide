@@ -38,6 +38,18 @@
     <small>Shown on the performer's profile page &ndash; a good highlight clip works well here.</small>
   </div>
   <div class="field">
+    <label>Genres</label>
+    {% set sel = performer.genre_list if performer.genre_list is defined else (performer.genre or '').split(',') %}
+    {% include "admin/_genre_picker.html" %}
+    <small>Used for the genre filter and badges on the home page.</small>
+  </div>
+  <div class="field">
+    <label for="spotify">Spotify tracks</label>
+    <textarea id="spotify" name="spotify" rows="3" placeholder="Paste Spotify track, album, playlist or artist links, one per line">{% if performer.spotify_raw is defined %}{{ performer.spotify_raw }}{% else %}{% for l in (performer.spotify or '').splitlines() %}https://open.spotify.com/{{ l }}
+{% endfor %}{% endif %}</textarea>
+    <small>Shown as players on the performer's page and on their gig pages (the first one).</small>
+  </div>
+  <div class="field">
     <label for="social">Instagram or Facebook video/post link</label>
     <input type="text" id="social" name="social" placeholder="https://instagram.com/reel/... or https://facebook.com/.../videos/..." value="{{ performer.social or performer.social_url or '' }}">
   </div>

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from "_macros.html" import gig_card, social_embed %}
+{% from "_macros.html" import gig_card, social_embed, spotify_players %}
 {% block title %}{{ gig.title }} at {{ gig.venue_name }} &ndash; {{ config.SITE_NAME }}{% endblock %}
 {% block description %}{{ gig.title }} live at {{ gig.venue_name }}, {{ gig.town }} on {{ gig.gig_date|date('long') }}.{% endblock %}
 {% block og_image %}{% if gig.flyer %}{{ url_for('public.uploads', filename=gig.flyer, _external=True) }}{% else %}{{ super() }}{% endif %}{% endblock %}
@@ -15,6 +15,7 @@
   {% if performers %}
   <p class="gig-detail__performers">{% for p in performers %}{% if not loop.first %} &middot; {% endif %}<a href="{{ url_for('public.performer', slug=p.slug) }}">{{ p.name }}</a>{% endfor %}</p>
   {% endif %}
+  {% set gg = gig.display_genre|genres %}{% if gg %}<p>{% for slug, label in gg %}<a class="badge badge--genre" href="{{ url_for('public.index', genre=slug) }}">{{ label }}</a> {% endfor %}</p>{% endif %}
   {% if gig.ticket_url %}
     <p><a class="btn" href="{{ gig.ticket_url }}" rel="noopener" target="_blank">Tickets</a></p>
   {% endif %}
@@ -27,6 +28,9 @@
   {% endif %}
 
   {{ social_embed(gig.display_social_url) }}
+
+  {% for p in performers if p.spotify %}{% if loop.index <= 2 %}{{ spotify_players(p.spotify.split("
+")[0]) }}{% endif %}{% endfor %}
 
   {% if gig.flyer %}
     <p><img class="flyer" src="{{ url_for('public.uploads', filename=gig.flyer) }}" alt="Flyer for {{ gig.title }}"></p>

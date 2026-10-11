@@ -16,6 +16,7 @@
       </p>
       {% if gig.featured %}<span class="badge badge--featured">Featured</span>{% endif %}
       {% if gig.display_youtube_id %}<span class="badge badge--video">&#9654; Video</span>{% endif %}
+      {% for slug, label in gig.display_genre|genres %}<span class="badge badge--genre">{{ label }}</span>{% endfor %}
     </div>
   </a>
 </article>
@@ -34,6 +35,12 @@
     </div>
   </a>
 </article>
+{% endmacro %}
+
+{% macro spotify_players(stored) %}
+{% for e in stored|spotify_embeds %}
+<iframe class="spotify-embed" src="https://open.spotify.com/embed/{{ e.path }}" width="100%" height="{{ e.height }}" frameborder="0" allow="encrypted-media; clipboard-write; fullscreen" loading="lazy" title="Spotify player"></iframe>
+{% endfor %}
 {% endmacro %}
 
 {% macro social_embed(url) %}

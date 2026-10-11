@@ -88,8 +88,11 @@ def register_cli(app):
     @click.option("--booking", help="Booking contact: email, phone, manager, 'via Instagram DM', etc.")
     @click.option("--pro/--no-pro", "is_pro", default=None, help="Mark as an Artist Pro subscriber (or unmark).")
     @click.option("--pro-until", help="ISO date (YYYY-MM-DD) the Pro subscription runs through.")
+    @click.option("--genre", help="Comma-separated genres, e.g. 'jazz,soul' (see app/genres.py). Empty string clears.")
+    @click.option("--spotify", help="One or more Spotify track/album/playlist/artist links, separated by spaces. Empty string clears.")
     def update_performer_command(
-        slug, bio, youtube_id, social_url, related, website, instagram, based_in, booking, is_pro, pro_until
+        slug, bio, youtube_id, social_url, related, website, instagram, based_in, booking, is_pro, pro_until,
+        genre, spotify,
     ):
         """Set one or more fields on an existing performer's profile (e.g. for
         content added from a video/story rather than through the admin form)."""
@@ -116,6 +119,10 @@ def register_cli(app):
             fields["is_pro"] = is_pro
         if pro_until is not None:
             fields["pro_until"] = pro_until
+        if genre is not None:
+            fields["genre"] = genre
+        if spotify is not None:
+            fields["spotify"] = spotify
         name = update_performer(slug, **fields)
         click.echo(f"Updated '{name}'.")
 

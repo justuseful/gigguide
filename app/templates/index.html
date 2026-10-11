@@ -6,7 +6,16 @@
   <p>{{ config.SITE_TAGLINE }}</p>
 </section>
 
-{% if latest_stories %}
+{% if genre_options %}
+<nav class="genre-bar" aria-label="Filter gigs by genre">
+  <a class="chip-link{% if not active_genre %} is-active{% endif %}" href="{{ url_for('public.index') }}">All</a>
+  {% for slug, label, n in genre_options %}
+  <a class="chip-link{% if active_genre == slug %} is-active{% endif %}" href="{{ url_for('public.index', genre=slug) }}">{{ label }} <span class="chip-link__n">{{ n }}</span></a>
+  {% endfor %}
+</nav>
+{% endif %}
+
+{% if latest_stories and not active_genre %}
 <section>
   <h2 class="day__heading">Latest stories</h2>
   <div class="card-grid">
@@ -16,7 +25,7 @@
 </section>
 {% endif %}
 
-{% if featured %}
+{% if featured and not active_genre %}
 <section>
   <h2 class="day__heading">Featured</h2>
   <div class="card-grid">
@@ -37,6 +46,6 @@
   </section>
   {% endfor %}
 {% else %}
-  <p class="empty">No upcoming gigs listed yet. Check back soon.</p>
+  <p class="empty">{% if active_genre %}No upcoming gigs tagged with that genre yet.{% else %}No upcoming gigs listed yet. Check back soon.{% endif %}</p>
 {% endif %}
 {% endblock %}

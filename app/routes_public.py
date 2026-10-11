@@ -3,6 +3,7 @@ from datetime import timedelta
 from flask import Blueprint, Response, abort, current_app, render_template, request, send_from_directory, url_for
 
 from .db import get_db
+from .genres import GENRES, genre_list
 from .util import today_local
 
 bp = Blueprint("public", __name__)
@@ -21,7 +22,11 @@ GIG_COLUMNS = """
     COALESCE(g.social_url, (
         SELECT p.social_url FROM gig_performers gp JOIN performers p ON p.id = gp.performer_id
         WHERE gp.gig_id = g.id AND p.social_url IS NOT NULL LIMIT 1
-    )) AS display_social_url
+    )) AS display_social_url,
+    COALESCE(NULLIF(g.genre, ''), (
+        SELECT group_concat(p.genre, '') FROM gig_performers gp JOIN performers p ON p.id = gp.performer_id
+        WHERE gp.gig_id = g.id AND p.genre IS NOT NULL
+    )) AS display_genre
 """
 GIG_FROM = "FROM gigs g JOIN venues v ON v.id = g.venue_id"
 
@@ -56,6 +61,17 @@ def index():
         "ORDER BY g.gig_date, g.featured DESC, g.start_time, g.title",
         (today.isoformat(),),
     ).fetchall()
+    # Genre filter: only offer genres that actually have an upcoming gig, with counts.
+    genre_counts = {}
+    for row in rows:
+        for slug, _label in genre_list(row["display_genre"]):
+            genre_counts[slug] = genre_counts.get(slug, 0) + 1
+    genre_options = [(slug, label, genre_counts[slug]) for slug, label in GENRES if slug in genre_counts]
+    active_genre = request.args.get("genre", "").strip().lower()
+    if active_genre not in genre_counts:
+        active_genre = ""
+    if active_genre:
+        rows = [r for r in rows if active_genre in dict(genre_list(r["display_genre"]))]
     featured = [row for row in rows if row["featured"]][:6]
     groups = []
     for row in rows:
@@ -71,6 +87,8 @@ def index():
         groups=groups,
         featured=featured,
         latest_stories=latest_stories,
+        genre_options=genre_options,
+        active_genre=active_genre,
         today=today.isoformat(),
         tomorrow=(today + timedelta(days=1)).isoformat(),
     )
@@ -93,7 +111,7 @@ def gig(gig_id):
         (row["venue_id"], gig_id, today_local().isoformat()),
     ).fetchall()
     performers = db.execute(
-        "SELECT p.slug, p.name FROM performers p JOIN gig_performers gp ON gp.performer_id = p.id "
+        "SELECT p.slug, p.name, p.spotify FROM performers p JOIN gig_performers gp ON gp.performer_id = p.id "
         "WHERE gp.gig_id = ? ORDER BY p.name",
         (gig_id,),
     ).fetchall()
