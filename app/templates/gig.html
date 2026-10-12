@@ -15,7 +15,7 @@
   {% if performers %}
   <p class="gig-detail__performers">{% for p in performers %}{% if not loop.first %} &middot; {% endif %}<a href="{{ url_for('public.performer', slug=p.slug) }}">{{ p.name }}</a>{% endfor %}</p>
   {% endif %}
-  {% set gg = gig.display_genre|genres %}{% if gg %}<p>{% for slug, label in gg %}<a class="badge badge--genre" href="{{ url_for('public.index', genre=slug) }}">{{ label }}</a> {% endfor %}</p>{% endif %}
+  {% set gg = gig.display_genre|genres %}{% if gg %}<p>{% for slug, label in gg %}<a class="badge badge--genre" href="{{ url_for('public.genre', slug=slug) }}">{{ label }}</a> {% endfor %}</p>{% endif %}
   {% if gig.ticket_url %}
     <p><a class="btn" href="{{ gig.ticket_url }}" rel="noopener" target="_blank">Tickets</a></p>
   {% endif %}

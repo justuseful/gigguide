@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Gigs by genre &ndash; {{ config.SITE_NAME }}{% endblock %}
+{% block description %}Find live music by genre across Byron Bay and the Northern Rivers: jazz, blues, rock, soul, country and more.{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1>Gigs by genre</h1>
+  <p>Pick a sound and see what's coming up.</p>
+</section>
+<nav class="genre-bar" aria-label="Genres">
+  {% for slug, label, n in options %}
+  <a class="chip-link" href="{{ url_for('public.genre', slug=slug) }}">{{ label }} <span class="chip-link__n">{{ n }}</span></a>
+  {% endfor %}
+</nav>
+<p class="muted">Counts are upcoming gigs. Not every act is tagged yet, so the lists will keep growing.</p>
+{% endblock %}

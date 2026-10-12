@@ -183,6 +183,7 @@ def sitemap_xml():
         {"loc": url_for("public.venues", _external=True)},
         {"loc": url_for("public.jam_nights", _external=True)},
         {"loc": url_for("public.doofs", _external=True)},
+        {"loc": url_for("public.genres", _external=True)},
         {"loc": url_for("public.performers", _external=True)},
         {"loc": url_for("public.support", _external=True)},
     ]
@@ -219,3 +220,4 @@ from . import routes_performers  # noqa: E402,F401
 from . import routes_support  # noqa: E402,F401
 from . import routes_jam_nights  # noqa: E402,F401
 from . import routes_doofs  # noqa: E402,F401
+from . import routes_genres  # noqa: E402,F401

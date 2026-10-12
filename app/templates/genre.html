@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% from "_macros.html" import gig_card %}
+{% block title %}{{ label }} gigs &ndash; {{ config.SITE_NAME }}{% endblock %}
+{% block description %}Upcoming {{ label|lower }} gigs across Byron Bay and the Northern Rivers.{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1>{{ label }}</h1>
+  <p>{{ count }} upcoming gig{{ '' if count == 1 else 's' }}. <a href="{{ url_for('public.genres') }}">All genres &rarr;</a></p>
+</section>
+{% if groups %}
+  {% for day, gigs in groups %}
+  <section>
+    <h2 class="day__heading">
+      {% if day == today %}Today &middot; {% elif day == tomorrow %}Tomorrow &middot; {% endif %}{{ day|date('long') }}
+    </h2>
+    <div class="card-grid">
+      {% for gig in gigs %}{{ gig_card(gig) }}{% endfor %}
+    </div>
+  </section>
+  {% endfor %}
+{% else %}
+  <p class="empty">No upcoming {{ label|lower }} gigs tagged yet.</p>
+{% endif %}
+{% endblock %}
