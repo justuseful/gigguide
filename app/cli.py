@@ -76,6 +76,15 @@ def register_cli(app):
         slug, created = ensure_performer(name)
         click.echo(f"{'Created' if created else 'Found'} '{name}' -> slug '{slug}'")
 
+    @app.cli.command("sync-lismore-jazz")
+    def sync_lismore_jazz_command():
+        """Pull concerts from lismorejazz.org and tag the acts as jazz (run daily from cron)."""
+        from .sync_lismore_jazz import sync
+
+        result = sync()
+        click.echo(f"Lismore Jazz Club: {result['events_on_site']} events on site; "
+                   f"added {len(result['added'])}: {result['added']}; newly tagged jazz: {result['tagged_jazz']}")
+
     @app.cli.command("update-performer")
     @click.argument("slug")
     @click.option("--bio", help="Replace the profile bio text.")
