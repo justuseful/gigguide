@@ -3,6 +3,7 @@ import re
 # (slug, label) - the fixed set offered in the genre filter and admin forms.
 GENRES = [
     ("rock", "Rock"),
+    ("pub-rock", "Pub rock"),
     ("blues", "Blues"),
     ("jazz", "Jazz"),
     ("soul", "Soul"),
