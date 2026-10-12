@@ -105,6 +105,7 @@ def _gig_form_data() -> dict:
         "featured": 1 if f.get("featured") else 0,
         "is_jam_night": 1 if f.get("is_jam_night") else 0,
         "genre_list": f.getlist("genre"),
+        "event_kind": (f.get("event_kind") or "").strip() or None,
         "performer_ids": f.getlist("performer_ids", type=int),
         "repeat_weekly": bool(f.get("repeat_weekly")),
     }
@@ -224,11 +225,11 @@ def gig_new():
             ), 400
         cur = db.execute(
             "INSERT INTO gigs (venue_id, title, gig_date, start_time, price, ticket_url, "
-            "youtube_id, social_url, flyer, description, featured, is_jam_night, genre) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
+            "youtube_id, social_url, flyer, description, featured, is_jam_night, genre, event_kind) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
             (
                 data["venue_id"], data["title"], data["gig_date"], data["start_time"], data["price"],
                 data["ticket_url"], data["youtube_id"], data["social_url"], flyer, data["description"],
-                data["featured"], data["is_jam_night"], data["genre"],
+                data["featured"], data["is_jam_night"], data["genre"], data["event_kind"],
             ),
         )
         new_id = cur.lastrowid
@@ -285,12 +286,12 @@ def gig_edit(gig_id):
             flyer = new_flyer
         db.execute(
             "UPDATE gigs SET venue_id=?, title=?, gig_date=?, start_time=?, price=?, ticket_url=?, "
-            "youtube_id=?, social_url=?, flyer=?, description=?, featured=?, is_jam_night=?, genre=?, "
+            "youtube_id=?, social_url=?, flyer=?, description=?, featured=?, is_jam_night=?, genre=?, event_kind=?, "
             "updated_at=datetime('now') WHERE id=?",
             (
                 data["venue_id"], data["title"], data["gig_date"], data["start_time"], data["price"],
                 data["ticket_url"], data["youtube_id"], data["social_url"], flyer, data["description"],
-                data["featured"], data["is_jam_night"], data["genre"], gig_id,
+                data["featured"], data["is_jam_night"], data["genre"], data["event_kind"], gig_id,
             ),
         )
         _set_gig_performers(db, gig_id, data["performer_ids"])

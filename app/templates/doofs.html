@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% from "_macros.html" import gig_card %}
+{% block title %}Doofs &amp; Pop-ups &ndash; {{ config.SITE_NAME }}{% endblock %}
+{% block description %}Doofs, house parties and roaming performers across Byron Bay and the Northern Rivers.{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1>Doofs &amp; Pop-ups</h1>
+  <p>Doofs, house parties, and the roaming performers who turn up unannounced.</p>
+</section>
+
+<h2 class="section-title">Upcoming</h2>
+{% if events %}
+<div class="card-grid">{% for g in events %}{{ gig_card(g, show_date=True) }}{% endfor %}</div>
+{% else %}
+<p class="empty">Nothing listed yet. These are often word of mouth.</p>
+{% endif %}
+
+<h2 class="section-title">Roaming performers</h2>
+{% if roaming %}
+<div class="card-grid">
+  {% for p in roaming %}
+  <article class="story-card">
+    <a class="story-card__link" href="{{ url_for('public.performer', slug=p.slug) }}">
+      <div class="story-card__body">
+        <h3>{{ p.name }}</h3>
+        {% if p.bio %}<p class="muted">{{ p.bio|truncate(160) }}</p>{% endif %}
+        {% if p.booking %}<p class="muted">Bookings: {{ p.booking }}</p>{% endif %}
+      </div>
+    </a>
+  </article>
+  {% endfor %}
+</div>
+{% else %}
+<p class="empty">Nobody listed yet.</p>
+{% endif %}
+{% endblock %}

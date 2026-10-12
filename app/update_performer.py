@@ -4,11 +4,11 @@ from .link_performers import get_or_create_performer, refresh_pro_featuring_for_
 
 FIELDS = {
     "bio", "youtube_id", "social_url", "related_performers", "website", "instagram",
-    "based_in", "booking", "is_pro", "pro_until", "genre", "spotify",
+    "based_in", "booking", "is_pro", "pro_until", "genre", "spotify", "is_roaming",
 }
 # Fields where 0/False is a meaningful value, not "clear this field" - unlike the
 # text fields, an empty string doesn't apply to them.
-BOOLEAN_FIELDS = {"is_pro"}
+BOOLEAN_FIELDS = {"is_pro", "is_roaming"}
 
 
 def update_performer(slug: str, **fields) -> str:

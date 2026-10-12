@@ -28,6 +28,8 @@ MIGRATIONS = [
     ("gigs", "social_url", "TEXT"),
     ("gigs", "is_jam_night", "INTEGER NOT NULL DEFAULT 0"),
     ("gigs", "genre", "TEXT"),
+    ("gigs", "event_kind", "TEXT"),
+    ("performers", "is_roaming", "INTEGER NOT NULL DEFAULT 0"),
     ("performers", "genre", "TEXT"),
     ("performers", "spotify", "TEXT"),
     ("performers", "social_url", "TEXT"),

@@ -55,13 +55,14 @@ def add_gig():
         youtube_id = parse_youtube_id(data.get("youtube_id") or "") or None
         social_url = parse_social_url(data.get("social_url") or "") or None
         genre = parse_genres(data.get("genre")) if data.get("genre") else None
+        kind = data.get("event_kind") if data.get("event_kind") in ("doof", "house-party", "pop-up") else None
     except ValueError as exc:
         return jsonify({"error": str(exc)}), 400
 
     cur = db.execute(
         "INSERT INTO gigs (venue_id, title, gig_date, start_time, price, ticket_url, "
-        "description, is_jam_night, youtube_id, social_url, genre, source) "
-        "VALUES (?,?,?,?,?,?,?,?,?,?,?,'auto-check')",
+        "description, is_jam_night, youtube_id, social_url, genre, event_kind, source) "
+        "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,'auto-check')",
         (
             venue["id"], title, gig_date,
             (data.get("start_time") or None),
@@ -72,6 +73,7 @@ def add_gig():
             youtube_id,
             social_url,
             genre,
+            kind,
         ),
     )
     link_gig_performers(db, cur.lastrowid, title)

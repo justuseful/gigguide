@@ -92,6 +92,16 @@
   </div>
 
   <div class="field">
+    <label for="event_kind">Doof / house party / pop-up</label>
+    <select id="event_kind" name="event_kind">
+      <option value="">Regular gig</option>
+      <option value="doof" {% if gig.event_kind == 'doof' %}selected{% endif %}>Doof</option>
+      <option value="house-party" {% if gig.event_kind == 'house-party' %}selected{% endif %}>House party</option>
+      <option value="pop-up" {% if gig.event_kind == 'pop-up' %}selected{% endif %}>Pop-up / flash mob</option>
+    </select>
+    <small>Also shows the gig on the Doofs &amp; Pop-ups page.</small>
+  </div>
+  <div class="field">
     <label>Genre (optional)</label>
     {% set sel = gig.genre_list if gig.genre_list is defined else (gig.genre or '').split(',') %}
     {% include "admin/_genre_picker.html" %}

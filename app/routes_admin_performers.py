@@ -19,6 +19,7 @@ def _performer_form_data() -> dict:
         "based_in": (f.get("based_in") or "").strip() or None,
         "booking": (f.get("booking") or "").strip() or None,
         "is_pro": 1 if f.get("is_pro") else 0,
+        "is_roaming": 1 if f.get("is_roaming") else 0,
         "pro_until": (f.get("pro_until") or "").strip() or None,
         "genre_list": f.getlist("genre"),
         "spotify_raw": (f.get("spotify") or "").strip(),
@@ -73,10 +74,10 @@ def performer_new():
         slug = unique_slug(db, "performers", slugify(data["name"]))
         db.execute(
             "INSERT INTO performers (slug, name, bio, instagram, website, youtube_id, social_url, "
-            "based_in, booking, is_pro, pro_until, genre, spotify) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
+            "based_in, booking, is_pro, pro_until, genre, spotify, is_roaming) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
             (slug, data["name"], data["bio"], data["instagram"], data["website"], data["youtube_id"],
              data["social_url"], data["based_in"], data["booking"], data["is_pro"], data["pro_until"],
-             data["genre"], data["spotify"]),
+             data["genre"], data["spotify"], data["is_roaming"]),
         )
         db.commit()
         flash("Performer added.", "ok")
@@ -100,10 +101,10 @@ def performer_edit(performer_id):
             return render_template("admin/performer_form.html", performer=data, is_new=False), 400
         db.execute(
             "UPDATE performers SET name=?, bio=?, instagram=?, website=?, youtube_id=?, social_url=?, "
-            "based_in=?, booking=?, is_pro=?, pro_until=?, genre=?, spotify=? WHERE id=?",
+            "based_in=?, booking=?, is_pro=?, pro_until=?, genre=?, spotify=?, is_roaming=? WHERE id=?",
             (data["name"], data["bio"], data["instagram"], data["website"], data["youtube_id"],
              data["social_url"], data["based_in"], data["booking"], data["is_pro"], data["pro_until"],
-             data["genre"], data["spotify"], performer_id),
+             data["genre"], data["spotify"], data["is_roaming"], performer_id),
         )
         if data["is_pro"]:
             refresh_pro_featuring_for_performer(db, performer_id)
