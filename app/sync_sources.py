@@ -135,7 +135,7 @@ def sync_rails(ctx: Ctx):
     if vid is None:
         ctx.log.append("railway-friendly-bar venue missing")
         return
-    text = _get(RAILS_PAGE).decode("utf8", "ignore")
+    text = _get(RAILS_PAGE, timeout=15).decode("utf8", "ignore")
     text = re.sub(r"<(script|style)[^>]*>.*?</\1>", "", text, flags=re.S)
     text = html.unescape(re.sub(r"<[^>]+>", "\n", text))
     lines = [l.strip() for l in text.splitlines() if l.strip()]
