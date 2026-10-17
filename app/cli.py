@@ -76,6 +76,18 @@ def register_cli(app):
         slug, created = ensure_performer(name)
         click.echo(f"{'Created' if created else 'Found'} '{name}' -> slug '{slug}'")
 
+    @app.cli.command("sync-sources")
+    @click.option("--only", multiple=True, type=click.Choice(["beach", "rails", "echo"]), help="Limit to one or more sources.")
+    @click.option("--dry-run", is_flag=True, help="Show what would be added without writing anything.")
+    def sync_sources_command(only, dry_run):
+        """Add missing gigs from the Beach Hotel feed, the Rails gig guide and the Echo feed (run daily from cron)."""
+        from .sync_sources import sync_all
+
+        result = sync_all(only=set(only) or None, dry_run=dry_run)
+        for line in result["log"]:
+            click.echo(line)
+        click.echo(f"{'Would add' if dry_run else 'Added'} {result['added']} gig(s).")
+
     @app.cli.command("sync-lismore-jazz")
     def sync_lismore_jazz_command():
         """Pull concerts from lismorejazz.org and tag the acts as jazz (run daily from cron)."""
