@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Book me for videography &ndash; {{ config.SITE_NAME }}{% endblock %}
+{% block description %}Gig and event videography in Byron Bay and the Northern Rivers: live music, bands, venues and festivals, with highlight clips and promo reels.{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1>Book me for videography</h1>
+  <p>I film live music around Byron Bay and the Northern Rivers: gigs, bands, venues and events.
+     I cut highlight clips and promo reels you can use to promote your next show.</p>
+</section>
+
+<div class="venue-box">
+  <h2 class="venue-box__title">Get in touch</h2>
+  <p>
+    <a class="btn" href="{{ mailto }}">Email me</a>
+    <a class="btn btn--ghost" href="{{ instagram_url }}" rel="noopener" target="_blank">Instagram @{{ instagram_handle }}</a>
+  </p>
+  <p class="muted">Email: <a href="{{ mailto }}">{{ email }}</a>. Tell me the date, the venue or event, and what you need,
+     and I'll get back to you.</p>
+</div>
+{% endblock %}
