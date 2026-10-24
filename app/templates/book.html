@@ -11,10 +11,11 @@
 <div class="venue-box">
   <h2 class="venue-box__title">Get in touch</h2>
   <p>
+    <a class="btn" href="tel:{{ phone_tel }}">Call {{ phone_display }}</a>
     <a class="btn" href="{{ mailto }}">Email me</a>
     <a class="btn btn--ghost" href="{{ instagram_url }}" rel="noopener" target="_blank">Instagram @{{ instagram_handle }}</a>
   </p>
-  <p class="muted">Email: <a href="{{ mailto }}">{{ email }}</a>. Tell me the date, the venue or event, and what you need,
+  <p class="muted">Phone: <a href="tel:{{ phone_tel }}">{{ phone_display }}</a>. Email: <a href="{{ mailto }}">{{ email }}</a>. Tell me the date, the venue or event, and what you need,
      and I'll get back to you.</p>
 </div>
 {% endblock %}
